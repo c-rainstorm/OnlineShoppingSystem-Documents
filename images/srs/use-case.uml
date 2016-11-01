@@ -1,0 +1,44 @@
+@startuml
+left to right direction
+
+actor 游客 as A1
+actor 普通用户 as A2
+actor 商家 as A3
+actor 管理员 as A4
+
+usecase C1 as "商品查询与浏览"
+usecase C2 as "用户信息管理"
+usecase C3 as "收货人管理"
+usecase C4 as "购物车管理"
+usecase C5 as "收藏夹管理"
+usecase C6 as "投诉商家"
+usecase C7 as "订单发起与管理"
+usecase C9 as "开店申请"
+usecase C10 as "店铺信息管理"
+usecase C11 as "商品管理"
+usecase C12 as "销量统计"
+
+A1 -- C1
+A1 -- C4
+
+A2 -- C1
+A2 -- C2
+A2 -- C3
+A2 -- C4
+A2 -- C5
+A2 -- C6
+A2 -- C7
+
+A3 -- C7
+A3 -- C9
+A3 -- C10
+A3 -- C11
+A3 -- C12
+
+C2 -- A4
+C6 -- A4
+C7 -- A4
+C9 -- A4
+C10 -- A4
+
+@enduml
