@@ -22,7 +22,7 @@ drop table if exists goods_order;
 
 drop table if exists user;
 
-drop table if exists receiver;
+drop table if exists consignee;
 
 drop table if exists shop;
 
@@ -123,24 +123,24 @@ create table goods_order
    complete_time        datetime,
    annotation           varchar(100),
    total                numeric(10,2) not null,
-   receiver_id          int not null,
-   check(order_status in('未付款','已付款','已发货','已收货')),
+   consignee_id          int not null,
+   check(order_status in('待付款','待发货','已发货','已完成','取消')),
    check(pay_method in('货到付款','在线支付')),
    primary key (order_id)
 );
 
 /*==============================================================*/
-/* Table: receiver                                              */
+/* Table: consignee                                              */
 /*==============================================================*/
-create table receiver
+create table consignee
 (
-   receiver_id          int not null,
+   consignee_id          int not null,
    user_id              int not null,
    name                 varchar(20) not null,
    address              varchar(100) not null,
    phone                char(11) not null,
    used_times           int not null default 0,
-   primary key (receiver_id)
+   primary key (consignee_id)
 );
 
 /*==============================================================*/
@@ -185,7 +185,7 @@ create table transaction
    commit_time          datetime not null default now(),
    complete_time        datetime,
    annotation           varchar(100),
-   check(transaction_status in('提交中','已受理','已处理')),
+   check(transaction_status in('未处理','已拒绝','已通过')),
    check(transaction_type in('开店申请','商家投诉','意见反馈')),
    primary key (transaction_id)
 );
@@ -229,13 +229,13 @@ alter table goods_order add constraint FK_manage_order foreign key (user_id)
 alter table goods_order add constraint FK_shop_order foreign key (registration_id)
       references shop (registration_id) on delete restrict on update restrict;
 
-alter table receiver add constraint FK_manage_receiver foreign key (user_id)
+alter table consignee add constraint FK_manage_consignee foreign key (user_id)
       references user (user_id) on delete restrict on update restrict;
 
 alter table shop add constraint FK_shop_to_user foreign key (user_id)
       references user (user_id) on delete restrict on update restrict;
 
-alter table shopping_cart add constraint FK_manage_shoppingcart foreign key (user_id)
+alter table shopping_cart add constraint FK_manage_shopping_cart foreign key (user_id)
       references user (user_id) on delete restrict on update restrict;
 
 alter table transaction add constraint FK_apply foreign key (user_id)
