@@ -1,32 +1,34 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2016/11/13 20:55:52                          */
+/* Created on:     2016/11/16 22:58:31                          */
 /*==============================================================*/
 
 
 drop table if exists admin;
 
-drop table if exists transaction;
-
 drop table if exists category;
 
-drop table if exists favorite_goods;
+drop table if exists collect_goods;
 
-drop table if exists favorite_shop;
+drop table if exists collect_shop;
 
 drop table if exists goods;
+
+drop table if exists goods_attribute;
 
 drop table if exists goods_in_order;
 
 drop table if exists goods_order;
 
-drop table if exists user;
-
-drop table if exists consignee;
+drop table if exists receiver;
 
 drop table if exists shop;
 
-drop table if exists shopping_cart;
+drop table if exists to_purchase;
+
+drop table if exists transaction;
+
+drop table if exists user;
 
 /*==============================================================*/
 /* Table: admin                                                 */
@@ -37,8 +39,7 @@ create table admin
    password             varchar(100) not null,
    admin_name           varchar(20),
    primary key (admin_id),
-   check(len(password)>=6 and len(password)<=20)
-);
+ );
 
 /*==============================================================*/
 /* Table: category                                              */
@@ -52,23 +53,25 @@ create table category
 );
 
 /*==============================================================*/
-/* Table: favorite_goods                                        */
+/* Table: collect_goods                                         */
 /*==============================================================*/
-create table favorite_goods
+create table collect_goods
 (
-   goods_id             int not null,
-   user_id              int,
-   primary key (goods_id)
+   user_id               int not null,
+   goods_id              int not null,
+   collect_goods_status  bool default true,
+   primary key (user_id, goods_id)
 );
 
 /*==============================================================*/
-/* Table: favorite_shop                                         */
+/* Table: collect_shop                                          */
 /*==============================================================*/
-create table favorite_shop
+create table collect_shop
 (
-   registration_id      char(15) not null,
-   user_id              int,
-   primary key (registration_id)
+   user_id              int not null,
+   shop_id              char(15) not null,
+   collect_shop_status  bool default true,
+   primary key (user_id, shop_id)
 );
 
 /*==============================================================*/
@@ -78,18 +81,29 @@ create table goods
 (
    goods_id             int not null,
    category_id          int not null,
-   registration_id      char(15) not null,
+   shop_id              char(15) not null,
    goods_name           varchar(20) not null,
-   preview              varchar(20) default 'none.jpg',
-   cost                 numeric(10,2) not null,
-   price                numeric(10,2) not null,
+   preview              varchar(20) ,
    sales                int default 0,
-   inventory            int default 0,
    discount_deadline    datetime,
-   discount_rate        numeric(4,2),
-   goods_status         bool default false,
+   discount_rate        numeric(4,2) default 1.00,
+   goods_status         bool default true,
    goods_describe       varchar(300),
    primary key (goods_id)
+);
+
+/*==============================================================*/
+/* Table: goods_attribute                                       */
+/*==============================================================*/
+create table goods_attribute
+(
+   attribute_id         int not null,
+   goods_id             int not null,
+   attribute_value      varchar(10),
+   inventory            int default 0,
+   cost                 numeric(10,2) not null,
+   price                numeric(10,2) not null,
+   primary key (attribute_id)
 );
 
 /*==============================================================*/
@@ -98,14 +112,15 @@ create table goods
 create table goods_in_order
 (
    goods_id             int not null,
-   order_id             int not null,
+   attribute_id         int not null,
+   order_id             bigint not null,
    goods_num            int not null,
    cost                 numeric(10,2) not null,
    actual_price         numeric(10,2) not null,
    content              varchar(100),
-   evaculate_score      int,
+   evaculate_score      smallint,
    evaculate_time       datetime,
-   primary key (goods_id)
+   primary key (attribute_id, order_id)
 );
 
 /*==============================================================*/
@@ -113,34 +128,34 @@ create table goods_in_order
 /*==============================================================*/
 create table goods_order
 (
-   order_id             int not null,
-   registration_id      char(15),
-   user_id              int,
+   order_id             bigint not null,
+   shop_id              char(15) not null,
+   user_id              int not null,
    order_status         char(10) not null,
-   tracking_number      int,
+   tracking_number      bigint,
    pay_method           char(8) not null,
-   order_time           datetime not null default now(),
+   order_time           datetime not null,
    complete_time        datetime,
    annotation           varchar(100),
    total                numeric(10,2) not null,
-   consignee_id          int not null,
-   check(order_status in('待付款','待发货','已发货','已完成','取消')),
-   check(pay_method in('货到付款','在线支付')),
-   primary key (order_id)
+   receiver_id          int not null,
+   primary key (order_id),
+   check(order_status in('待付款','待发货','待收货','待评价','已完成','已取消')),
+   check(pay_method in('货到付款','在线支付'))
 );
 
 /*==============================================================*/
-/* Table: consignee                                              */
+/* Table: receiver                                              */
 /*==============================================================*/
-create table consignee
+create table receiver
 (
-   consignee_id          int not null,
+   receiver_id          int not null,
    user_id              int not null,
    name                 varchar(20) not null,
    address              varchar(100) not null,
    phone                char(11) not null,
-   used_times           int not null default 0,
-   primary key (consignee_id)
+   used_times           int not null,
+   primary key (receiver_id)
 );
 
 /*==============================================================*/
@@ -148,27 +163,28 @@ create table consignee
 /*==============================================================*/
 create table shop
 (
-   registration_id      char(15) not null,
+   shop_id              char(15) not null,
    user_id              int not null,
-   shop_name            varchar(30),
-   address              varchar(100),
+   shop_name            varchar(30) not null,
+   address              varchar(100) not null,
    phone                char(11) not null,
    announcement         varchar(200) default '暂无公告',
-   evaluate_avg         int default 0,
-   evaluate_number      int default 0,
+   evaluate_sum         bigint default 0,
+   evaluate_number      bigint default 0,
    shop_describe        varchar(300) default '暂无描述',
-   primary key (registration_id)
+   primary key (shop_id)
 );
 
 /*==============================================================*/
-/* Table: shopping_cart                                          */
+/* Table: to_purchase                                           */
 /*==============================================================*/
-create table shopping_cart
+create table to_purchase
 (
+   user_id              int not null,
    goods_id             int not null,
-   user_id              int,
    goods_num            int,
-   primary key (goods_id)
+   to_purchase_status   bool default true,
+   primary key (user_id, goods_id)
 );
 
 /*==============================================================*/
@@ -177,17 +193,17 @@ create table shopping_cart
 create table transaction
 (
    transaction_id       int not null,
-   user_id              int not null,
    admin_id             int,
+   user_id              int not null,
    transaction_type     char(10) not null,
    transaction_status   char(10) not null,
    content              varchar(300) not null,
    commit_time          datetime not null default now(),
    complete_time        datetime,
    annotation           varchar(100),
-   check(transaction_status in('未处理','已拒绝','已通过')),
-   check(transaction_type in('开店申请','商家投诉','意见反馈')),
-   primary key (transaction_id)
+   primary key (transaction_id),
+   check(transaction_status in('未处理','已通过','已拒绝')),
+   check(transaction_type in('开店申请','用户投诉'))
 );
 
 /*==============================================================*/
@@ -196,46 +212,58 @@ create table transaction
 create table user
 (
    user_id              int not null AUTO_INCREMENT,
-   registration_id      char(15),
+   shop_id              char(15),
+   usename              varchar(20) not null,
    phone                char(11) unique not null,
    password             varchar(100) not null,
-   user_name             varchar(20),
-   avatar               varchar(20) default 'none.jpg',
-   sex                  char(4) ,
+   nickname             varchar(20),
+   avatar               varchar(20),
+   sex                  char(4),
    birthday             date,
-   primary key (user_id),
-   check(sex in('男','女','保密')),
-   check(len(password)>=6 and len(password)<=20)
+   primary key (user_id)，
+   check(sex in('男','女','保密'))
 );
 
-alter table favorite_goods add constraint FK_manage_goods foreign key (user_id)
+alter table collect_goods add constraint FK_collect_goods foreign key (goods_id)
+      references goods (goods_id) on delete restrict on update restrict;
+
+alter table collect_goods add constraint FK_collect_goods foreign key (user_id)
       references user (user_id) on delete restrict on update restrict;
 
-alter table favorite_shop add constraint FK_manage_shop foreign key (user_id)
+alter table collect_shop add constraint FK_collect_shop foreign key (shop_id)
+      references shop (shop_id) on delete restrict on update restrict;
+
+alter table collect_shop add constraint FK_collect_shop foreign key (user_id)
       references user (user_id) on delete restrict on update restrict;
 
 alter table goods add constraint FK_refer foreign key (category_id)
       references category (category_id) on delete restrict on update restrict;
 
-alter table goods add constraint FK_sell foreign key (registration_id)
-      references shop (registration_id) on delete restrict on update restrict;
+alter table goods add constraint FK_sell foreign key (shop_id)
+      references shop (shop_id) on delete restrict on update restrict;
 
-alter table goods_in_order add constraint FK_contain foreign key (order_id)
+alter table goods_attribute add constraint FK_contain_attribute foreign key (goods_id)
+      references goods (goods_id) on delete restrict on update restrict;
+
+alter table goods_in_order add constraint FK_contain_goods foreign key (order_id)
       references goods_order (order_id) on delete restrict on update restrict;
 
 alter table goods_order add constraint FK_manage_order foreign key (user_id)
       references user (user_id) on delete restrict on update restrict;
 
-alter table goods_order add constraint FK_shop_order foreign key (registration_id)
-      references shop (registration_id) on delete restrict on update restrict;
+alter table goods_order add constraint FK_process_order foreign key (shop_id)
+      references shop (shop_id) on delete restrict on update restrict;
 
-alter table consignee add constraint FK_manage_consignee foreign key (user_id)
+alter table receiver add constraint FK_manage_receiver foreign key (user_id)
       references user (user_id) on delete restrict on update restrict;
 
-alter table shop add constraint FK_shop_to_user foreign key (user_id)
+alter table shop add constraint FK_manage foreign key (user_id)
       references user (user_id) on delete restrict on update restrict;
 
-alter table shopping_cart add constraint FK_manage_shopping_cart foreign key (user_id)
+alter table to_purchase add constraint FK_to_purchase foreign key (goods_id)
+      references goods (goods_id) on delete restrict on update restrict;
+
+alter table to_purchase add constraint FK_to_purchase foreign key (user_id)
       references user (user_id) on delete restrict on update restrict;
 
 alter table transaction add constraint FK_apply foreign key (user_id)
@@ -244,5 +272,6 @@ alter table transaction add constraint FK_apply foreign key (user_id)
 alter table transaction add constraint FK_handle foreign key (admin_id)
       references admin (admin_id) on delete restrict on update restrict;
 
-alter table user add constraint FK_user_to_shop foreign key (registration_id)
-      references shop (registration_id) on delete restrict on update restrict;
+alter table user add constraint FK_manage foreign key (shop_id)
+      references shop (shop_id) on delete restrict on update restrict;
+
