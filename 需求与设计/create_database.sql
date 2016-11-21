@@ -35,13 +35,12 @@ drop table if exists user;
 create table user
 (
    user_id              int not null AUTO_INCREMENT,
-   registration_id      char(15),
    user_name            varchar(20) not null unique,
    password             varchar(100) not null,
    nickname             varchar(20),
    phone                char(11) unique not null,
    avatar               varchar(20),
-   sex                  char(4),
+   sex                  varchar(8),
    birthday             date,
    primary key (user_id),
    check(sex in('男','女','保密'))
@@ -66,8 +65,8 @@ create table transaction
    transaction_id       int not null,
    user_id              int not null,
    admin_id             int,
-   transaction_type     char(10) not null,
-   transaction_status   char(10) not null,
+   transaction_type     varchar(16) not null,
+   transaction_status   varchar(10) not null,
    comment              varchar(300) not null,
    commit_time          datetime not null default now(),
    complete_time        datetime,
@@ -103,7 +102,6 @@ create table goods
    category_id          int not null,
    registration_id      char(15) not null,
    goods_name           varchar(20) not null,
-   /*preview            varchar(20) ,     预览图？*/
    preview_num          smallint check(preview_num>=0 and preview_num<=6),
    sales                int not null default 0,
    discount_deadline    datetime,
@@ -122,7 +120,7 @@ BEGIN
        update favorite_goods set goods_is_valid = false where goods_id = new.goods_id ;
        update goods_attribute set attribute_is_valid = false where goods_id = new.goods_id ;
        update shopping_cart set cart_is_valid = false where goods_id = new.goods_id;
-    end if;   
+    end if;
  END $
  DELIMITER ;
 
@@ -149,9 +147,9 @@ create table goods_order
    order_id             bigint not null,
    user_id              int not null,
    registration_id      char(15) not null,
-   order_status         char(10) not null,
-   tracking_number      bigint,
-   pay_method           char(8) not null,
+   order_status         varchar(10) not null,
+   tracking_number      char(12),
+   pay_method           varchar(16) not null,
    order_time           datetime not null,
    complete_time        datetime,
    annotation           varchar(100),
@@ -185,15 +183,15 @@ AFTER UPDATE ON goods_in_order
 FOR EACH ROW
 BEGIN
        declare temp1 bigint;
-       declare temp2 char(15); 
+       declare temp2 char(15);
     if new.evaluate_score != old.evaluate_score then
        set temp2 = (select registration_id from goods where goods_id = new.goods_id);/*获得店铺编号*/
        set temp1 = (select evaluate_sum from shop where registration_id = temp2);  /*获得店铺当前总评分*/
        update shop set evaluate_sum = temp1 + new.evaluate_score where registration_id = temp2;
        set temp1 = (select evaluate_number from shop where registration_id = temp2);  /*获得店铺当前评分人数*/
        update shop set evaluate_number = temp1 + 1 where registration_id = temp2;
-       update goods_in_order set evaluate_time = now() 
-              where goods_id = new.goods_id and attribute_id = new.attribute_id and order_id = new.order_id;
+       update goods_in_order set evaluate_time = now()
+	      where goods_id = new.goods_id and attribute_id = new.attribute_id and order_id = new.order_id;
     end if;
  END $
  DELIMITER ;
@@ -241,6 +239,7 @@ create table shopping_cart
 (
    user_id              int not null,
    attribute_id         int not null,
+   /* 为保证效率增加的 goods_id 冗余 */
    goods_id             int not null,
    goods_num            int not null,
    cart_is_valid        bool not null default true,
@@ -254,8 +253,8 @@ create table shopping_cart
 create table category
 (
    category_id          int not null,
-   level_one            varchar(10) not null,
-   level_two            varchar(10) not null,
+   level_one            varchar(16) not null,
+   level_two            varchar(16) not null,
    primary key (category_id)
 );
 
@@ -265,9 +264,6 @@ alter table transaction add constraint FK_apply foreign key (user_id)
 
 alter table transaction add constraint FK_handle foreign key (admin_id)
       references admin (admin_id) on delete restrict on update restrict;
-
-alter table user add constraint FK_user_to_shop foreign key (registration_id)
-      references shop (registration_id) on delete restrict on update restrict;
 
 alter table shop add constraint FK_shop_to_user foreign key (user_id)
       references user (user_id) on delete restrict on update restrict;
