@@ -20,7 +20,7 @@ use OSS;
 /*==============================================================*/
 create table category
 (
-   category_id          int not null,
+   category_id          int not null AUTO_INCREMENT,
    level_one            varchar(30) not null,
    level_two            varchar(30) not null,
    is_valid             bool not null default true,
@@ -50,7 +50,7 @@ create table user
 /*==============================================================*/
 create table receiver
 (
-   receiver_id          int not null,
+   receiver_id          int not null AUTO_INCREMENT,
    user_id              int not null,
    name                 varchar(30) not null,
    address              varchar(150) not null,
@@ -82,7 +82,7 @@ create table admin
 /*==============================================================*/
 create table transaction
 (
-   transaction_id       int not null,
+   transaction_id       int not null AUTO_INCREMENT,
    user_id              int not null,
    admin_id             int,
    transaction_type     varchar(16) not null,
@@ -129,7 +129,7 @@ create table shop
 /*==============================================================*/
 create table goods
 (
-   goods_id             int not null,
+   goods_id             int not null AUTO_INCREMENT,
    category_id          int not null,
    registration_id      char(15) not null,
    goods_name           varchar(90) not null,
@@ -162,7 +162,7 @@ BEGIN
 
 create table goods_image
 (
-      image_id          int not null,
+      image_id          int not null AUTO_INCREMENT,
       goods_id          int not null,
       image_addr        varchar(50) not null default 'images/avatars/default.jpg',
       is_valid          bool not null default true,
@@ -180,7 +180,7 @@ create table goods_image
 /*==============================================================*/
 create table goods_attribute
 (
-   attribute_id         int not null,
+   attribute_id         int not null AUTO_INCREMENT,
    attribute_value      varchar(90) not null,
    goods_id             int not null,
    cost                 double not null,
@@ -202,7 +202,7 @@ create table goods_attribute
 /*==============================================================*/
 create table goods_order
 (
-   order_id             bigint(16) not null zerofill,
+   order_id             bigint(16) not null AUTO_INCREMENT,
    user_id              int not null,
    registration_id      char(15) not null,
    order_status         varchar(10) not null,
@@ -276,10 +276,11 @@ BEGIN
 /*==============================================================*/
 create table favorite_shops
 (
+   id                    bigint not null AUTO_INCREMENT,
    registration_id       char(15) not null,
    user_id               int not null,
    is_valid              bool not null default true,
-   primary key (user_id, registration_id),
+   primary key (id),
 
    index (user_id),
 
@@ -294,10 +295,11 @@ create table favorite_shops
 /*==============================================================*/
 create table favorite_goods
 (
+   id                    bigint not null AUTO_INCREMENT,
    goods_id              int not null,
    user_id               int not null,
    is_valid              bool default true,
-   primary key (user_id, goods_id),
+   primary key (id),
 
    index (user_id),
 
@@ -312,13 +314,14 @@ create table favorite_goods
 /*==============================================================*/
 create table shopping_cart
 (
+   id                   bigint not null AUTO_INCREMENT,
    user_id              int not null,
    attribute_id         int not null,
    /* 为保证效率增加的 goods_id 冗余 */
    goods_id             int not null,
    goods_num            int not null,
    is_valid             bool not null default true,
-   primary key (user_id, attribute_id),
+   primary key (id),
 
    index (user_id),
 
