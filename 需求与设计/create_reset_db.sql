@@ -3,39 +3,17 @@
 /* Created on:     2016/11/20                                   */
 /*==============================================================*/
 
-drop database if exists OSS;
+grant select, insert, update, delete
+  on OSS.*
+  to 'groupnine'@'localhost' identified by 'groupnine';
+flush privileges;
 
-create database OSS 
-      character set utf8mb4 
+drop database if exists OSS;
+create database OSS
+      character set utf8mb4
       collate utf8mb4_unicode_ci;
 
 use OSS;
-
-drop table if exists admin;
-
-drop table if exists category;
-
-drop table if exists favorite_goods;
-
-drop table if exists favorite_shops;
-
-drop table if exists goods;
-
-drop table if exists goods_attribute;
-
-drop table if exists goods_in_order;
-
-drop table if exists goods_order;
-
-drop table if exists receiver;
-
-drop table if exists shop;
-
-drop table if exists shopping_cart;
-
-drop table if exists transaction;
-
-drop table if exists user;
 
 /*==============================================================*/
 /* Table: category                                              */
@@ -82,7 +60,7 @@ create table receiver
    primary key (receiver_id),
 
    index (user_id),
-  
+
    constraint FK_manage_receiver foreign key (user_id)
       references user (user_id) on delete restrict on update restrict
 );
@@ -110,16 +88,16 @@ create table transaction
    transaction_type     varchar(16) not null,
    transaction_status   varchar(10) not null,
    comment              varchar(300) not null,
-   commit_time          datetime not null default now(),
+   commit_time          datetime not null,
    complete_time        datetime,
    annotation           varchar(300),
    primary key (transaction_id),
-   
+
    constraint FK_apply foreign key (user_id)
       references user (user_id) on delete restrict on update CASCADE,
    constraint FK_handle foreign key (admin_id)
       references admin (admin_id) on delete restrict on update CASCADE,
-   
+
    check(transaction_status in('未处理','已通过','已拒绝')),
    check(transaction_type in('开店申请','用户投诉'))
 );
@@ -157,7 +135,7 @@ create table goods
    goods_name           varchar(90) not null,
    sales                int not null default 0,
    discount_deadline    datetime,
-   discount_rate        numeric(4,2) default 1.00,
+   discount_rate        double default 1.00,
    is_valid             bool not null default true,
    goods_describe       varchar(300),
    primary key (goods_id),
@@ -193,7 +171,7 @@ create table goods_image
       index (goods_id),
 
       constraint FK_goods_image foreign key (goods_id)
-            references goods (goods_id) on delete restrict on update CASCADE
+	    references goods (goods_id) on delete restrict on update CASCADE
 );
 
 
@@ -205,8 +183,8 @@ create table goods_attribute
    attribute_id         int not null,
    attribute_value      varchar(90) not null,
    goods_id             int not null,
-   cost                 numeric(10,2) not null,
-   price                numeric(10,2) not null,
+   cost                 double not null,
+   price                double not null,
    inventory            int default 0,
    is_valid             bool not null default true,
    primary key (attribute_id),
@@ -224,7 +202,7 @@ create table goods_attribute
 /*==============================================================*/
 create table goods_order
 (
-   order_id             bigint not null,
+   order_id             bigint(16) not null zerofill,
    user_id              int not null,
    registration_id      char(15) not null,
    order_status         varchar(10) not null,
@@ -233,7 +211,7 @@ create table goods_order
    order_time           datetime not null,
    complete_time        datetime,
    annotation           varchar(100),
-   total                numeric(10,2) not null,
+   total                double not null,
    receiver_id          int not null,
    primary key (order_id),
 
@@ -257,8 +235,8 @@ create table goods_in_order
    attribute_id         int not null,
    goods_id             int not null,
    goods_num            int not null,
-   cost                 numeric(10,2) not null,
-   actual_price         numeric(10,2) not null,
+   cost                 double not null,
+   actual_price         double not null,
    comment              varchar(300),
    evaluate_score       smallint,
    evaluate_time        datetime,
@@ -270,7 +248,7 @@ create table goods_in_order
       references goods (goods_id) on delete restrict on update CASCADE,
    constraint FK_attr_id foreign key (attribute_id)
       references goods_attribute (attribute_id) on delete restrict on update CASCADE,
-  
+
    check(evaluate_score >= 0 and evaluate_score < 6)
 );
 
@@ -348,8 +326,6 @@ create table shopping_cart
       references user (user_id) on delete restrict on update CASCADE,
    constraint FK_shopping_cart_attr foreign key (attribute_id)
       references goods_attribute (attribute_id) on delete restrict on update CASCADE,
-   
+
    check(goods_num >= 0)
 );
-
-
