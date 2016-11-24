@@ -1,3 +1,3 @@
 drop database if exists OSS;
 
-drop user groupnine;
+drop user 'groupnine'@'localhost';
