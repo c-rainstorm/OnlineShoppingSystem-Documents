@@ -41,9 +41,15 @@
         1. String:phone ; 手机号       username == phone
         1. String:password ; 密码
     - return:
-        1. String:result ;   true 验证成功, false 验证失败
+        1. String:result ;   成功后返回网站首页, 否则返回 false
     - option:
         - JSON: {"result":"true"}
+    - side-effect:
+        - 登录成功后，设置 session 属性
+            1. userLoginStatus = true      
+            1. shopHasOpend = true         //若该用户已开店   
+            1. username = ..               //实际用户名
+            1. registrationId = ..         //shopHasOpend = false 时无意义
     - status:
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
@@ -84,9 +90,15 @@
         1. String:phone ; 手机号
         1. String:password ; 密码
     - return:
-        1. String:result ;   true 成功, false 失败
+        1. String:result ;   成功后返回网站首页, 否则返回 false
     - option:
-        - JSON: {"result":"true"}
+        - JSON: {"result":"false"}
+    - side-effect:
+        - 添加成功后，设置 session 属性
+            1. userLoginStatus = true      
+            1. shopHasOpend = true         //若该用户已开店   
+            1. username = ..               //实际用户名
+            1. registrationId = ..         //shopHasOpend = false 时无意义
     - status:
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
