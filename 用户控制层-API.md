@@ -6,7 +6,8 @@
     - [模板](#%E6%A8%A1%E6%9D%BF)
     - [登录](#%E7%99%BB%E5%BD%95)
     - [注册](#%E6%B3%A8%E5%86%8C)
-    - [订单](#%E8%AE%A2%E5%8D%95)
+    - [购物车管理](#%E8%B4%AD%E7%89%A9%E8%BD%A6%E7%AE%A1%E7%90%86)
+    - [订单管理](#%E8%AE%A2%E5%8D%95%E7%AE%A1%E7%90%86)
 
 <!-- /TOC -->
 
@@ -17,15 +18,15 @@
 1. [接口描述]
     - url: [url]
     - parameter list:
-        1. [parameter name] ; [parameter description]
-        1. [parameter name] ; [parameter description]
-        1. [parameter name] ; [parameter description]
+        1. [type]:[parameter name] ; [parameter description]
+        1. [type]:[parameter name] ; [parameter description]
+        1. [type]:[parameter name] ; [parameter description]
     - return: 
-        1. [dataItem] ; [description]
-        1. [dataItem] ; [description]
-        1. [dataItem] ; [description]
+        1. [type]:[dataItem] ; [description]
+        1. [type]:[dataItem] ; [description]
+        1. [type]:[dataItem] ; [description]
     - option:
-        - JSON: 
+        - JSON:  //TODO: 后端开发人员给出一个示例
     - status:
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
@@ -36,12 +37,13 @@
 1. 检测用户登录信息
     - url: /checkUserLogin.action
     - parameter list:
-        1. username ; 用户名
-        1. phone ; 手机号       username == phone
-        1. password ; 密码
+        1. String:username ; 用户名
+        1. String:phone ; 手机号       username == phone
+        1. String:password ; 密码
     - return:
-        1. true ; 验证成功
-        1. false; 验证失败
+        1. String:result ;   true 验证成功, false 验证失败
+    - option:
+        - JSON: {"result":"true"}
     - status:
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
@@ -52,10 +54,11 @@
 1. 检测用户名是否可用
     - url: /checkUsername.action
     - parameter list:
-        1. username ; 用户名
+        1. String:username ; 用户名
     - return:
-        1. true ; 用户名可用
-        1. false; 用户名不可用
+        1. String:result ;   true 可用, false 不可用
+    - option:
+        - JSON: {"result":"true"}
     - status:
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
@@ -64,10 +67,11 @@
 1. 检测手机号是否可用
     - url: /checkPhone.action
     - parameter list:
-        1. phone ; 手机号
+        1. String:phone ; 手机号
     - return:
-        1. true ; 手机号可用
-        1. false; 手机号不可用
+        1. String:result ;   true 可用, false 不可用
+    - option:
+        - JSON: {"result":"true"}
     - status:
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
@@ -76,26 +80,165 @@
 1. 添加新用户
     - url: /addNewUser.action
     - parameter list:
-        1. username ; 用户名
-        1. phone ; 手机号
-        1. password ; 密码
+        1. String:username ; 用户名
+        1. String:phone ; 手机号
+        1. String:password ; 密码
     - return:
-        1. true ; 添加成功
-        1. false; 添加失败
+        1. String:result ;   true 成功, false 失败
+    - option:
+        - JSON: {"result":"true"}
     - status:
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
         1. [ ] 联调  ; Unfinish
 
-## 订单
+## 购物车管理
+
+1. 获取购物车信息（所有商品）
+    - url: /getShoppingCart.action
+    - parameter list:
+        1. String:username     ; 用户名
+    - return:
+        - []                          ; 购物车中商品数组
+            1. long:id                ; 购物车记录编号
+            1. goods 
+                - String:goodsName      ; 商品名
+                - String:goodsDescribe  ; 商品描述
+                - goodsImages[]  ; 图像地址数组
+                    - String:imageAddr  ; 图像地址
+                - goodsAttrs[]   ; 商品属性数组
+                    - int:attributeid        ; 商品属性编号
+                    - String:attributeValue     ; 商品属性值
+                    - double:price              ; 商品价格，打折以后的
+                    - int:inventory          ; 库存量
+            1. int:attributeid        ; 欲购属性编号
+            1. int:goodsNum           ; 欲购数量
+    - option:
+        - JSON: 
+    - status:
+        1. [ ] 前端  ; Unfinish
+        1. [ ] 后端  ; Unfinish
+        1. [ ] 联调  ; Unfinish
+
+1. 添加到购物车
+    - url: /addToShoppingCart.action
+    - parameter list:
+        1. String:username         ; 用户名
+        1. int:goodsId             ; 商品编号
+        1. int:attributeid         ; 属性编号
+        1. int:goodsNum            ; 商品数量
+    - return:
+        1. String:result ;   true 成功, false 失败
+    - option:
+        - JSON: {"result":"true"}
+    - status:
+        1. [ ] 前端  ; Unfinish
+        1. [ ] 后端  ; Unfinish
+        1. [ ] 联调  ; Unfinish
+
+1. 删除购物车中商品
+    - url: /deleteFromShoppingCart.action
+    - parameter list:
+        1. String:username     ; 用户名
+        1. long:id             ; 购物车记录编号
+    - return:
+        1. String:result ;   true 成功, false 失败
+    - option:
+        - JSON: {"result":"true"}
+    - status:
+        1. [ ] 前端  ; Unfinish
+        1. [ ] 后端  ; Unfinish
+        1. [ ] 联调  ; Unfinish
+
+1. 商品数量加一
+    - url: /increaseGoodsNumInShoppingCart.action
+    - parameter list:
+        1. String:username     ; 用户名
+        1. long:id             ; 购物车记录编号
+    - return: 
+        1. int:goodsNum ; 失败返回旧值，成功返回新值
+    - option:
+        - JSON: {"goodsNum":1}
+    - status:
+        1. [ ] 前端  ; Unfinish
+        1. [ ] 后端  ; Unfinish
+        1. [ ] 联调  ; Unfinish
+
+1. 商品数量减一
+    - url: /decreaseGoodsNumInShoppingCart.action
+    - parameter list:
+        1. String:username     ; 用户名
+        1. long:id             ; 购物车记录编号
+    - return: 
+        1. int:goodsNum ; 失败返回旧值，成功返回新值
+    - option:
+        - JSON: {"goodsNum":1}
+    - status:
+        1. [ ] 前端  ; Unfinish
+        1. [ ] 后端  ; Unfinish
+        1. [ ] 联调  ; Unfinish
+
+1. 直接修改商品数量
+    - url: /updateGoodsNumInShoppingCart.action
+    - parameter list:
+        1. String:username     ; 用户名
+        1. long:id             ; 购物车记录编号
+        1. int:goodsNum        ; 新的商品数量
+    - return: 
+        1. int:goodsNum ; 失败返回旧值，成功返回新值
+    - option:
+        - JSON: {"goodsNum":1}
+    - status:
+        1. [ ] 前端  ; Unfinish
+        1. [ ] 后端  ; Unfinish
+        1. [ ] 联调  ; Unfinish
+
+1. 修改商品属性
+    - url: /updateGoodsAttrInShoppingCart.action
+    - parameter list:
+        1. String:username     ; 用户名
+        1. long:id             ; 购物车记录编号
+        1. int:attributeid     ; 新的商品属性
+    - return: 
+        1. int:attributeid ; 失败返回旧值，成功返回新值
+    - option:
+        - JSON: {"attributeid":1111}
+    - status:
+        1. [ ] 前端  ; Unfinish
+        1. [ ] 后端  ; Unfinish
+        1. [ ] 联调  ; Unfinish
+
+
+## 订单管理
 
 1. 通过订单号获取订单详情
     - url: /getOrderById.action
     - parameter list:
-        1. orderId ; 订单号
+        1. String:orderId ; 订单号
     - return:
-        - 关于该订单的所有信息
-            - //TODO: 继续补充
+        1. String:orderId      ; 订单号
+        1. long:trackingNumber ; 运单号
+        1. String:orderStatus  ; 订单状态
+        1. receiver     ; 收货人
+            - String:name 
+            - String:address
+            - String:phone
+        1. goodsInOrder[] ; 订单中商品数组
+            - goods 
+                - String:goodsName      ; 商品名
+                - String:goodsDescribe  ; 商品描述
+                - goodsImages[]         ; 图像地址数组
+                    - String:imageAddr  ; 图像地址 
+            - String:attributeValue     ; 商品属性值
+            - int:goodsNum              ; 购买数量
+            - double:actualPrice        ; 成交价
+        1. String:payMethod    ; 支付方式
+        1. String:orderTime    ; 下单时间
+        1. String:completeTime ; 完成时间
+        1. String:annotation   ; 备注
+        1. double:total        ; 总金额
+    - option:
+        - JSON:  
     - status:
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
