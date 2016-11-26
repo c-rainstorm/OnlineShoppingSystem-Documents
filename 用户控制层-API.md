@@ -6,6 +6,7 @@
     - [模板](#%E6%A8%A1%E6%9D%BF)
     - [登录](#%E7%99%BB%E5%BD%95)
     - [注册](#%E6%B3%A8%E5%86%8C)
+    - [浏览信息](#%E6%B5%8F%E8%A7%88%E4%BF%A1%E6%81%AF)
     - [购物车管理](#%E8%B4%AD%E7%89%A9%E8%BD%A6%E7%AE%A1%E7%90%86)
     - [订单管理](#%E8%AE%A2%E5%8D%95%E7%AE%A1%E7%90%86)
 
@@ -55,7 +56,8 @@
         1. [ ] 后端  ; Unfinish
         1. [ ] 联调  ; Unfinish
 
-##　注册
+
+## 注册
 
 1. 检测用户名是否可用
     - url: /checkUsername.action
@@ -103,13 +105,39 @@
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
         1. [ ] 联调  ; Unfinish
+        
+## 浏览信息
 
+1. 获取分类信息
+    - url: /getCa
+    - parameter list:
+        1. [type]:[parameter name] ; [parameter description]
+        1. [type]:[parameter name] ; [parameter description]
+        1. [type]:[parameter name] ; [parameter description]
+    - return: 
+        1. [type]:[dataItem] ; [description]
+        1. [type]:[dataItem] ; [description]
+        1. [type]:[dataItem] ; [description]
+    - option:
+        - JSON:  //TODO: 后端开发人员给出一个示例
+    - status:
+        1. [ ] 前端  ; Unfinish
+        1. [ ] 后端  ; Unfinish
+        1. [ ] 联调  ; Unfinish
+
+1. 获取 5 个大类下
+ 
 ## 购物车管理
 
 1. 获取购物车信息（所有商品）
+
+   若本地购物车为不为空，则先将本地购物车添加到数据库并**清空该 Cookie**。
+
     - url: /getShoppingCart.action
     - parameter list:
         1. String:username     ; 用户名
+        1. Cookie:localShoppingCart  ; 本地购物车  
+            - 数据格式：[{"goodsId": 11111, "attributeId": 11, "goodsNum": 3}]
     - return:
         - []                          ; 购物车中商品数组
             1. long:id                ; 购物车记录编号
