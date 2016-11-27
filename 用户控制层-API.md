@@ -50,6 +50,7 @@
             1. userLoginStatus = true      
             1. shopHasOpend = true         //若该用户已开店   
             1. username = ..               //实际用户名
+            1. nickname = ..               //昵称
             1. registrationId = ..         //shopHasOpend = false 时无意义
     - status:
         1. [ ] 前端  ; Unfinish
