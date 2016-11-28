@@ -1,6 +1,6 @@
 /*==============================================================*/
-/* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2016/11/20                                   */
+/* DBMS name:      MySQL                                        */
+/* Created on:     2016/11/28                                   */
 /*==============================================================*/
 
 grant select, insert, update, delete
@@ -40,10 +40,28 @@ create table user
    avatar               varchar(50),
    sex                  varchar(8),
    birthday             date,
+   is_valid             bool not null default true,
    primary key (user_id),
    index (username),
    check(sex in('男','女','保密'))
 );
+
+DELIMITER $
+CREATE TRIGGER delete_user
+AFTER UPDATE ON user
+FOR EACH ROW
+BEGIN
+    if new.is_valid = false then
+       update goods_order set is_valid = false where user_id = new.user_id ;
+       update favorite_shops set is_valid = false where user_id = new.user_id;
+       update receiver set is_valid = false where user_id = new.user_id ;
+       update transaction set is_valid = false where user_id = new.user_id ;
+       update favorite_goods set is_valid = false where user_id = new.user_id;
+       update shop set is_valid = false where user_id = new.user_id ;
+       update shopping_cart set is_valid = false where user_id = new.user_id ;
+    end if;
+ END $
+ DELIMITER ;
 
 /*==============================================================*/
 /* Table: receiver                                              */
@@ -91,6 +109,7 @@ create table transaction
    commit_time          datetime not null,
    complete_time        datetime,
    annotation           varchar(300),
+   is_valid             bool not null default true,
    primary key (transaction_id),
 
    constraint FK_apply foreign key (user_id)
@@ -102,12 +121,28 @@ create table transaction
    check(transaction_type in('开店申请','用户投诉'))
 );
 
+DELIMITER $
+CREATE TRIGGER deal_transaction
+AFTER UPDATE ON transaction
+FOR EACH ROW
+BEGIN
+    if new.transaction_status = '已通过' and new.transaction_type = '开店申请' then
+       update shop set apply_status = '已通过' 
+       where shop_id = (select shop_id from shop where user_id = new.user_id) ;
+    end if; 
+    if new.transaction_status = '已拒绝' and new.transaction_type = '开店申请' then
+       update shop set apply_status = '未通过' where goods_id = new.goods_id 
+       where shop_id = (select shop_id from shop where user_id = new.user_id) ;
+    end if;
+ END $
+ DELIMITER ;
+
 /*==============================================================*/
 /* Table: shop                                                  */
 /*==============================================================*/
 create table shop
 (
-   registration_id      char(15) not null,
+   shop_id              char(15) not null AUTO_INCREMENT,
    user_id              int not null,
    shop_name            varchar(90) not null,
    address              varchar(150) not null,
@@ -116,13 +151,30 @@ create table shop
    announcement         varchar(300) default '暂无公告',
    evaluate_sum         bigint default 0,
    evaluate_number      bigint default 0,
-   primary key (registration_id),
+   is_valid             bool not null default true,
+   apply_status         varchar(10) not null,
+   
+   check(apply_status in('待审核','已通过','未通过')),
+   primary key (shop_id),
 
    index (user_id),
 
    constraint FK_shop_to_user foreign key (user_id)
       references user (user_id) on delete restrict on update CASCADE
 );
+
+DELIMITER $
+CREATE TRIGGER delete_shop
+AFTER UPDATE ON shop
+FOR EACH ROW
+BEGIN
+    if new.is_valid = false then
+       update goods set is_valid = false where shop_id = new.shop_id ;
+       update goods_order set is_valid = false where shop_id = new.shop_id ;
+       update favorite_shops set is_valid = false where shop_id = new.shop_id;
+    end if;
+ END $
+ DELIMITER ;
 
 /*==============================================================*/
 /* Table: goods                                                 */
@@ -131,7 +183,7 @@ create table goods
 (
    goods_id             int not null AUTO_INCREMENT,
    category_id          int not null,
-   registration_id      char(15) not null,
+   shop_id              char(15) not null,
    goods_name           varchar(90) not null,
    sales                int not null default 0,
    discount_deadline    datetime,
@@ -142,8 +194,8 @@ create table goods
 
    constraint FK_refer foreign key (category_id)
       references category (category_id) on delete restrict on update CASCADE,
-   constraint FK_sell foreign key (registration_id)
-      references shop (registration_id) on delete restrict on update CASCADE
+   constraint FK_sell foreign key (shop_id)
+      references shop (shop_id) on delete restrict on update CASCADE
 );
 
 DELIMITER $
@@ -160,6 +212,9 @@ BEGIN
  END $
  DELIMITER ;
 
+/*==============================================================*/
+/* Table: goods_image                                           */
+/*==============================================================*/
 create table goods_image
 (
       image_id          int not null AUTO_INCREMENT,
@@ -204,7 +259,7 @@ create table goods_order
 (
    order_id             bigint(16) not null AUTO_INCREMENT,
    user_id              int not null,
-   registration_id      char(15) not null,
+   shop_id              char(15) not null,
    order_status         varchar(10) not null,
    tracking_number      char(12),
    pay_method           varchar(16) not null,
@@ -213,14 +268,15 @@ create table goods_order
    annotation           varchar(100),
    total                double not null,
    receiver_id          int not null,
+   is_valid             bool not null default true,
    primary key (order_id),
 
    index (user_id),
 
    constraint FK_manage_order foreign key (user_id)
       references user (user_id) on delete restrict on update CASCADE,
-   constraint FK_process_order foreign key (registration_id)
-      references shop (registration_id) on delete restrict on update CASCADE,
+   constraint FK_process_order foreign key (shop_id)
+      references shop (shop_id) on delete restrict on update CASCADE,
 
    check(order_status in('待付款','待发货','待收货','待评价','已完成','已取消')),
    check(pay_method in('货到付款','在线支付'))
@@ -259,10 +315,10 @@ FOR EACH ROW
 BEGIN
        declare temp2 char(15);
     if new.evaluate_score != old.evaluate_score then
-       set temp2 = (select registration_id from goods where goods_id = new.goods_id);/*获得店铺编号*/
+       set temp2 = (select shop_id from goods where goods_id = new.goods_id);/*获得店铺编号*/
 
-       update shop set evaluate_sum = evaluate_sum + new.evaluate_score where registration_id = temp2;
-       update shop set evaluate_number = evaluate_number + 1 where registration_id = temp2;
+       update shop set evaluate_sum = evaluate_sum + new.evaluate_score where shop_id = temp2;
+       update shop set evaluate_number = evaluate_number + 1 where shop_id = temp2;
 
        update goods_in_order set evaluate_time = now()
 	      where order_id = new.order_id and goods_id = new.goods_id and attribute_id = new.attribute_id;
@@ -272,12 +328,12 @@ BEGIN
 
 
 /*==============================================================*/
-/* Table: favorite_shop                                          */
+/* Table: favorite_shops                                          */
 /*==============================================================*/
 create table favorite_shops
 (
    id                    bigint not null AUTO_INCREMENT,
-   registration_id       char(15) not null,
+   shop_id               char(15) not null,
    user_id               int not null,
    is_valid              bool not null default true,
    primary key (id),
@@ -286,8 +342,8 @@ create table favorite_shops
 
    constraint FK_favorite_shops_user foreign key (user_id)
       references user (user_id) on delete restrict on update CASCADE,
-   constraint FK_favorite_shops foreign key (registration_id)
-      references shop (registration_id) on delete restrict on update CASCADE
+   constraint FK_favorite_shops foreign key (shop_id)
+      references shop (shop_id) on delete restrict on update CASCADE
 );
 
 /*==============================================================*/
@@ -298,7 +354,7 @@ create table favorite_goods
    id                    bigint not null AUTO_INCREMENT,
    goods_id              int not null,
    user_id               int not null,
-   is_valid              bool default true,
+   is_valid              bool not null default true,
    primary key (id),
 
    index (user_id),
