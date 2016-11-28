@@ -6,7 +6,6 @@
     - [模板](#%E6%A8%A1%E6%9D%BF)
     - [登录](#%E7%99%BB%E5%BD%95)
     - [注册](#%E6%B3%A8%E5%86%8C)
-    - [浏览信息](#%E6%B5%8F%E8%A7%88%E4%BF%A1%E6%81%AF)
     - [购物车管理](#%E8%B4%AD%E7%89%A9%E8%BD%A6%E7%AE%A1%E7%90%86)
     - [订单管理](#%E8%AE%A2%E5%8D%95%E7%AE%A1%E7%90%86)
 
@@ -35,12 +34,15 @@
 
 ## 登录
 
+若本地购物车为不为空，则先将本地购物车添加到数据库并**清空该 Cookie**。
+
 1. 检测用户登录信息
     - url: /checkUserLogin.action
     - parameter list:
-        1. String:username ; 用户名
-        1. String:phone ; 手机号       username == phone
+        1. String:username / phone ; 用户名 / 手机号
         1. String:password ; 密码
+        1. Cookie:localShoppingCart  ; 本地购物车  
+            - 数据格式：[{"goodsId": 11111, "attributeId": 11, "goodsNum": 3}]
     - return:
         1. String:result ;   成功后返回网站首页, 否则返回 false
     - option:
@@ -49,14 +51,13 @@
         - 登录成功后，设置 session 属性
             1. userLoginStatus = true      
             1. shopHasOpend = true         //若该用户已开店   
-            1. username = ..               //实际用户名
+            1. userId = ..                 //实际用户 id
             1. nickname = ..               //昵称
-            1. registrationId = ..         //shopHasOpend = false 时无意义
+            1. shopId = ..                 //shopHasOpend = false 时无意义
     - status:
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
         1. [ ] 联调  ; Unfinish
-
 
 ## 注册
 
@@ -87,11 +88,14 @@
         1. [ ] 联调  ; Unfinish
 
 1. 添加新用户
+    - 若本地购物车为不为空，则先将本地购物车添加到数据库并**清空该 Cookie**。
     - url: /addNewUser.action
     - parameter list:
         1. String:username ; 用户名
         1. String:phone ; 手机号
         1. String:password ; 密码
+        1. Cookie:localShoppingCart  ; 本地购物车  
+            - 数据格式：[{"goodsId": 11111, "attributeId": 11, "goodsNum": 3}]
     - return:
         1. String:result ;   成功后返回网站首页, 否则返回 false
     - option:
@@ -100,53 +104,28 @@
         - 添加成功后，设置 session 属性
             1. userLoginStatus = true      
             1. shopHasOpend = true         //若该用户已开店   
-            1. username = ..               //实际用户名
-            1. registrationId = ..         //shopHasOpend = false 时无意义
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
-        
-## 浏览信息
-
-1. 获取分类信息
-    - url: /getCa
-    - parameter list:
-        1. [type]:[parameter name] ; [parameter description]
-        1. [type]:[parameter name] ; [parameter description]
-        1. [type]:[parameter name] ; [parameter description]
-    - return: 
-        1. [type]:[dataItem] ; [description]
-        1. [type]:[dataItem] ; [description]
-        1. [type]:[dataItem] ; [description]
-    - option:
-        - JSON:  //TODO: 后端开发人员给出一个示例
+            1. userId = ..                 //实际用户 id
+            1. nickname = ..               //昵称
+            1. shopId = ..                 //shopHasOpend = false 时无意义
     - status:
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
         1. [ ] 联调  ; Unfinish
 
-1. 获取 5 个大类下
- 
 ## 购物车管理
 
 1. 获取购物车信息（所有商品）
-
-   若本地购物车为不为空，则先将本地购物车添加到数据库并**清空该 Cookie**。
-
     - url: /getShoppingCart.action
     - parameter list:
-        1. String:username     ; 用户名
-        1. Cookie:localShoppingCart  ; 本地购物车  
-            - 数据格式：[{"goodsId": 11111, "attributeId": 11, "goodsNum": 3}]
+        1. int:userId     ; 用户 id
     - return:
         - []                          ; 购物车中商品数组
             1. long:id                ; 购物车记录编号
             1. goods 
+                - int:goodsId           ; 商品编号
                 - String:goodsName      ; 商品名
                 - String:goodsDescribe  ; 商品描述
-                - goodsImages[]  ; 图像地址数组
-                    - String:imageAddr  ; 图像地址
+                - String:imageAddr  ; 图像地址
                 - goodsAttrs[]   ; 商品属性数组
                     - int:attributeid        ; 商品属性编号
                     - String:attributeValue     ; 商品属性值
@@ -164,7 +143,7 @@
 1. 添加到购物车
     - url: /addToShoppingCart.action
     - parameter list:
-        1. String:username         ; 用户名
+        1. String:userId           ; 用户 id
         1. int:goodsId             ; 商品编号
         1. int:attributeid         ; 属性编号
         1. int:goodsNum            ; 商品数量
@@ -180,7 +159,7 @@
 1. 删除购物车中商品
     - url: /deleteFromShoppingCart.action
     - parameter list:
-        1. String:username     ; 用户名
+        1. String:userId       ; 用户 id
         1. long:id             ; 购物车记录编号
     - return:
         1. String:result ;   true 成功, false 失败
@@ -194,7 +173,7 @@
 1. 商品数量加一
     - url: /increaseGoodsNumInShoppingCart.action
     - parameter list:
-        1. String:username     ; 用户名
+        1. String:userId       ; 用户 id
         1. long:id             ; 购物车记录编号
     - return: 
         1. int:goodsNum ; 失败返回旧值，成功返回新值
@@ -208,7 +187,7 @@
 1. 商品数量减一
     - url: /decreaseGoodsNumInShoppingCart.action
     - parameter list:
-        1. String:username     ; 用户名
+        1. String:userId       ; 用户 id
         1. long:id             ; 购物车记录编号
     - return: 
         1. int:goodsNum ; 失败返回旧值，成功返回新值
@@ -222,7 +201,7 @@
 1. 直接修改商品数量
     - url: /updateGoodsNumInShoppingCart.action
     - parameter list:
-        1. String:username     ; 用户名
+        1. String:userId       ; 用户 id
         1. long:id             ; 购物车记录编号
         1. int:goodsNum        ; 新的商品数量
     - return: 
@@ -237,7 +216,7 @@
 1. 修改商品属性
     - url: /updateGoodsAttrInShoppingCart.action
     - parameter list:
-        1. String:username     ; 用户名
+        1. String:userId       ; 用户 id
         1. long:id             ; 购物车记录编号
         1. int:attributeid     ; 新的商品属性
     - return: 
@@ -266,6 +245,7 @@
             - String:phone
         1. goodsInOrder[] ; 订单中商品数组
             - goods 
+                - int:goodsId           ; 商品编号
                 - String:goodsName      ; 商品名
                 - String:goodsDescribe  ; 商品描述
                 - goodsImages[]         ; 图像地址数组
