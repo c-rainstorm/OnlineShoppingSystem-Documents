@@ -118,8 +118,7 @@
 
 1. 获取购物车信息（所有商品）
     - url: /getShoppingCart.action
-    - parameter list:
-        1. userId     ; 用户 id
+    - parameter list: none
     - return:
         - []                     ; 购物车中商品数组
             1. id                ; 购物车记录编号
@@ -145,7 +144,6 @@
 1. 添加到购物车
     - url: /addToShoppingCart.action
     - parameter list:
-        1. userId              ; 用户 id
         1. goodsId             ; 商品编号
         1. attributeid         ; 属性编号
         1. goodsNum            ; 商品数量
@@ -161,7 +159,6 @@
 1. 删除购物车中商品
     - url: /deleteFromShoppingCart.action
     - parameter list:
-        1. userId         ; 用户 id
         1. id             ; 购物车记录编号
     - return:
         1. result ;   "true" 成功, "false" 失败
@@ -203,7 +200,6 @@
 1. 直接修改商品数量
     - url: /updateGoodsNumInShoppingCart.action
     - parameter list:
-        1. userId       ; 用户 id
         1. id           ; 购物车记录编号
         1. goodsNum     ; 新的商品数量
     - return: 
@@ -218,7 +214,6 @@
 1. 修改商品属性
     - url: /updateGoodsAttrInShoppingCart.action
     - parameter list:
-        1. userId          ; 用户 id
         1. id              ; 购物车记录编号
         1. attributeid     ; 新的商品属性
     - return: 
