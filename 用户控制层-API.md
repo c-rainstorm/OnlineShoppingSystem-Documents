@@ -45,17 +45,16 @@
         1. password         ; 密码
         1. Cookie:localShoppingCart  ; 本地购物车  
             - 数据格式：[{"goodsId": "11111", "attributeId": "11", "goodsNum": "3"}]
-    - return:
-        1. result ;   成功后返回网站首页, 否则返回 "false"
     - option:
         - JSON: {"result":"true"}
     - side-effect:
-        - 登录成功后，设置 session 属性
+        - 登录成功后，设置 session 属性并返回网站首页
             1. userLoginStatus = "true"      
             1. shopHasOpend = "true"         //若该用户已开店   
             1. userId = ".."                 //实际用户 id
             1. nickname = ".."               //昵称
             1. shopId = ".."                 //shopHasOpend = "false" 时无意义
+        - 登录失败后，设置 session 属性 userLoginStatus = "false" 并重定向回登录页面
     - status:
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
@@ -98,17 +97,16 @@
         1. password     ; 密码
         1. Cookie:localShoppingCart  ; 本地购物车  
             - 数据格式：[{"goodsId": "11111", "attributeId": "11", "goodsNum": "3"}]
-    - return:
-        1. result ;   成功后返回网站首页, 否则返回 "false"
     - option:
         - JSON: {"result":"false"}
     - side-effect:
-        - 添加成功后，设置 session 属性
+        - 添加成功后，设置 session 属性并返回网站首页
             1. userLoginStatus = "true"      
             1. shopHasOpend = "true"         //若该用户已开店   
             1. userId = ".."                 //实际用户 id
             1. nickname = ".."               //昵称
             1. shopId = ".."                 //shopHasOpend = false 时无意义
+        - 添加失败后，重定向回注册页面。
     - status:
         1. [ ] 前端  ; Unfinish
         1. [ ] 后端  ; Unfinish
