@@ -169,34 +169,6 @@
         1. [ ] 后端  ; Unfinish
         1. [ ] 联调  ; Unfinish
 
-1. 商品数量加一
-    - url: /increaseGoodsNumInShoppingCart.action
-    - parameter list:
-        1. userId       ; 用户 id
-        1. id           ; 购物车记录编号
-    - return: 
-        1. goodsNum     ; 失败返回旧值，成功返回新值
-    - option:
-        - JSON: {"goodsNum":"1"}
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
-
-1. 商品数量减一
-    - url: /decreaseGoodsNumInShoppingCart.action
-    - parameter list:
-        1. userId         ; 用户 id
-        1. id             ; 购物车记录编号
-    - return: 
-        1. goodsNum       ; 失败返回旧值，成功返回新值
-    - option:
-        - JSON: {"goodsNum":"1"}
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
-
 1. 直接修改商品数量
     - url: /updateGoodsNumInShoppingCart.action
     - parameter list:
