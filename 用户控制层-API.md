@@ -6,10 +6,27 @@
 
 - [OSS 用户控制层部分编程接口](#oss-%E7%94%A8%E6%88%B7%E6%8E%A7%E5%88%B6%E5%B1%82%E9%83%A8%E5%88%86%E7%BC%96%E7%A8%8B%E6%8E%A5%E5%8F%A3)
     - [模板](#%E6%A8%A1%E6%9D%BF)
+        - [[接口描述]](#%E6%8E%A5%E5%8F%A3%E6%8F%8F%E8%BF%B0)
     - [登录](#%E7%99%BB%E5%BD%95)
+        - [检测用户登录信息](#%E6%A3%80%E6%B5%8B%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E4%BF%A1%E6%81%AF)
     - [注册](#%E6%B3%A8%E5%86%8C)
+        - [检测用户名是否可用](#%E6%A3%80%E6%B5%8B%E7%94%A8%E6%88%B7%E5%90%8D%E6%98%AF%E5%90%A6%E5%8F%AF%E7%94%A8)
+        - [检测手机号是否可用](#%E6%A3%80%E6%B5%8B%E6%89%8B%E6%9C%BA%E5%8F%B7%E6%98%AF%E5%90%A6%E5%8F%AF%E7%94%A8)
+        - [添加新用户](#%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7)
+    - [页面共享](#%E9%A1%B5%E9%9D%A2%E5%85%B1%E4%BA%AB)
+        - [获取用户头像地址](#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%A4%B4%E5%83%8F%E5%9C%B0%E5%9D%80)
+        - [获取购物车中商品数量](#%E8%8E%B7%E5%8F%96%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E5%95%86%E5%93%81%E6%95%B0%E9%87%8F)
+        - [退出登录](#%E9%80%80%E5%87%BA%E7%99%BB%E5%BD%95)
+    - [首页](#%E9%A6%96%E9%A1%B5)
+        - [获取分类信息](#%E8%8E%B7%E5%8F%96%E5%88%86%E7%B1%BB%E4%BF%A1%E6%81%AF)
+        - [获取商品图像通过一级分类](#%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E5%9B%BE%E5%83%8F%E9%80%9A%E8%BF%87%E4%B8%80%E7%BA%A7%E5%88%86%E7%B1%BB)
     - [购物车管理](#%E8%B4%AD%E7%89%A9%E8%BD%A6%E7%AE%A1%E7%90%86)
+        - [获取购物车信息（所有商品）](#%E8%8E%B7%E5%8F%96%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%BF%A1%E6%81%AF%E6%89%80%E6%9C%89%E5%95%86%E5%93%81)
+        - [添加到购物车](#%E6%B7%BB%E5%8A%A0%E5%88%B0%E8%B4%AD%E7%89%A9%E8%BD%A6)
+        - [删除购物车中商品](#%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E5%95%86%E5%93%81)
+        - [直接修改商品数量](#%E7%9B%B4%E6%8E%A5%E4%BF%AE%E6%94%B9%E5%95%86%E5%93%81%E6%95%B0%E9%87%8F)
     - [订单管理](#%E8%AE%A2%E5%8D%95%E7%AE%A1%E7%90%86)
+        - [通过订单号获取订单详情](#%E9%80%9A%E8%BF%87%E8%AE%A2%E5%8D%95%E5%8F%B7%E8%8E%B7%E5%8F%96%E8%AE%A2%E5%8D%95%E8%AF%A6%E6%83%85)
 
 <!-- /TOC -->
 
@@ -17,216 +34,222 @@
 
 ## 模板
 
-1. [接口描述]
-    - url: [url]
-    - parameter list:
-        1. [parameter name] ; [parameter description]
-        1. [parameter name] ; [parameter description]
-        1. [parameter name] ; [parameter description]
-    - return: 
-        1. [dataItem] ; [description]
-        1. [dataItem] ; [description]
-        1. [dataItem] ; [description]
-    - option:
-        - JSON:  //TODO: 后端开发人员给出一个示例
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
+### [接口描述]
+
+- url: [url]
+- parameter list:
+    1. [parameter name] ; [parameter description]
+    1. [parameter name] ; [parameter description]
+    1. [parameter name] ; [parameter description]
+- return: 
+    1. [dataItem] ; [description]
+    1. [dataItem] ; [description]
+    1. [dataItem] ; [description]
+- option:
+    - JSON:  //TODO: 后端开发人员给出一个示例
 
 ## 登录
 
 若本地购物车为不为空，则先将本地购物车添加到数据库并**清空该 Cookie**。
 
-1. 检测用户登录信息
-    - url: /checkUserLogin.action
-    - parameter list:
-        1. username / phone ; 用户名 / 手机号
-        1. password         ; 密码
-        1. Cookie:localShoppingCart  ; 本地购物车  
-            - 数据格式：[{"goodsId": "11111", "attributeId": "11", "goodsNum": "3"}]
-    - option:
-        - JSON: {"result":"true"}
-    - side-effect:
-        - 登录成功后，设置 session 属性并返回网站首页
-            1. userLoginStatus = "true"      
-            1. shopHasOpend = "true"         //若该用户已开店   
-            1. userId = ".."                 //实际用户 id
-            1. nickname = ".."               //昵称
-            1. shopId = ".."                 //shopHasOpend = "false" 时无意义
-        - 登录失败后，设置 session 属性 userLoginStatus = "false" 并重定向回登录页面
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
+### 检测用户登录信息
+
+- url: /checkUserLogin.action
+- parameter list:
+    1. username / phone ; 用户名 / 手机号
+    1. password         ; 密码
+    1. Cookie:localShoppingCart  ; 本地购物车  
+        - 数据格式：[{"goodsId": "11111", "attributeId": "11", "goodsNum": "3"}]
+- option:
+    - JSON: {"result":"true"}
+- side-effect:
+    - 登录成功后，设置 session 属性并返回网站首页
+        1. userLoginStatus = "true"      
+        1. shopHasOpend = "true"         //若该用户已开店   
+        1. userId = ".."                 //实际用户 id
+        1. nickname = ".."               //昵称
+        1. shopId = ".."                 //shopHasOpend = "false" 时无意义
+    - 登录失败后，设置 session 属性 userLoginStatus = "false" 并重定向回登录页面
 
 ## 注册
 
-1. 检测用户名是否可用
-    - url: /checkUsername.action
-    - parameter list:
-        1. username ; 用户名
-    - return:
-        1. result   ;   "true" 可用, "false" 不可用
-    - option:
-        - JSON: {"result":"true"}
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
+### 检测用户名是否可用
+    
+- url: /checkUsername.action
+- parameter list:
+    1. username ; 用户名
+- return:
+    1. result   ;   "true" 可用, "false" 不可用
+- option:
+    - JSON: {"result":"true"}
 
-1. 检测手机号是否可用
-    - url: /checkPhone.action
-    - parameter list:
-        1. phone    ; 手机号
-    - return:
-        1. result   ;   "true" 可用, "false" 不可用
-    - option:
-        - JSON: {"result":"true"}
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
+### 检测手机号是否可用
 
-1. 添加新用户
-    - 若本地购物车为不为空，则先将本地购物车添加到数据库并**清空该 Cookie**。
-    - url: /addNewUser.action
-    - parameter list:
-        1. username     ; 用户名
-        1. phone        ; 手机号
-        1. password     ; 密码
-        1. Cookie:localShoppingCart  ; 本地购物车  
-            - 数据格式：[{"goodsId": "11111", "attributeId": "11", "goodsNum": "3"}]
-    - option:
-        - JSON: {"result":"false"}
-    - side-effect:
-        - 添加成功后，设置 session 属性并返回网站首页
-            1. userLoginStatus = "true"      
-            1. shopHasOpend = "true"         //若该用户已开店   
-            1. userId = ".."                 //实际用户 id
-            1. nickname = ".."               //昵称
-            1. shopId = ".."                 //shopHasOpend = false 时无意义
-        - 添加失败后，重定向回注册页面。
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
+- url: /checkPhone.action
+- parameter list:
+    1. phone    ; 手机号
+- return:
+    1. result   ;   "true" 可用, "false" 不可用
+- option:
+    - JSON: {"result":"true"}
+
+### 添加新用户
+    
+- 若本地购物车为不为空，则先将本地购物车添加到数据库并**清空该 Cookie**。
+- url: /addNewUser.action
+- parameter list:
+    1. username     ; 用户名
+    1. phone        ; 手机号
+    1. password     ; 密码
+    1. Cookie:localShoppingCart  ; 本地购物车  
+        - 数据格式：[{"goodsId": "11111", "attributeId": "11", "goodsNum": "3"}]
+- option:
+    - JSON: {"result":"false"}
+- side-effect:
+    - 添加成功后，设置 session 属性并返回网站首页
+        1. userLoginStatus = "true"      
+        1. shopHasOpend = "true"         //若该用户已开店   
+        1. userId = ".."                 //实际用户 id
+        1. nickname = ".."               //昵称
+        1. shopId = ".."                 //shopHasOpend = false 时无意义
+    - 添加失败后，重定向回注册页面。
+
+## 页面共享
+
+### 获取用户头像地址
+
+- url: /getUserAvatar.action
+- return: 
+    - avatarAddr         ; 头像地址
+- option:
+    - JSON:  {"avatarAddr":"/images/avatars/default.jpg"}
+
+### 获取购物车中商品数量
+
+- url: /getGoodsNumInShoppingCart.action
+- return: 
+    - goodsNum           ; 商品数量
+- option:
+    - JSON:  {"goodsNum":"3"}
+    
+### 退出登录
+    
+- url: /userLogout.action
+- parameter list:
+- return: 
+    - userLoginStatus = "setAttr"  //设置为垃圾值
+
+## 首页
+
+### 获取分类信息
+
+- url: /getCategory.action
+- parameter list:
+- return: 
+    - levelOne[]          ; 第一级分类数组
+        - name            ; 第一级分类名
+        - levelTwo[]      ; 该一级分类下的二级分类数组
+            - name        ; 二级分类名
+
+### 获取商品图像通过一级分类
+
+- url: /getGoodsImagesByLevelOne.action
+- parameter list:
+    1. levelOne           ; 一级分类名
+    1. imageNum           ; 需要的图像数量，选销量最高的商品的图像   
+- return: 
+    1. goods[]
+        - goodsId         ; 商品编号
+        - imagesAddr      ; 商品图像
+- option:
+    - JSON:  
+
 
 ## 购物车管理
 
-1. 获取购物车信息（所有商品）
-    - url: /getShoppingCart.action
-    - parameter list: none
-    - return:
-        - []                     ; 购物车中商品数组
-            1. id                ; 购物车记录编号
-            1. goods 
-                - goodsId        ; 商品编号
-                - goodsName      ; 商品名
-                - goodsDescribe  ; 商品描述
-                - imageAddr      ; 图像地址
-                - goodsAttrs[]   ; 商品属性数组
-                    - attributeid        ; 商品属性编号
-                    - attributeValue     ; 商品属性值
-                    - price              ; 商品价格，打折以后的
-                    - inventory          ; 库存量
-            1. attributeid        ; 欲购属性编号
-            1. goodsNum           ; 欲购数量
-    - option:
-        - JSON: 
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
+### 获取购物车信息（所有商品）
 
-1. 添加到购物车
-    - url: /addToShoppingCart.action
-    - parameter list:
-        1. goodsId             ; 商品编号
-        1. attributeid         ; 属性编号
-        1. goodsNum            ; 商品数量
-    - return:
-        1. result ;   "true" 成功, "false" 失败
-    - option:
-        - JSON: {"result":"true"}
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
+- url: /getShoppingCart.action
+- parameter list: none
+- return:
+    - []                     ; 购物车中商品数组
+        1. id                ; 购物车记录编号
+        1. goods 
+            - goodsId        ; 商品编号
+            - goodsName      ; 商品名
+            - goodsDescribe  ; 商品描述
+            - imageAddr      ; 图像地址
+            - goodsAttrs[]   ; 商品属性数组
+                - attributeid        ; 商品属性编号
+                - attributeValue     ; 商品属性值
+                - price              ; 商品价格，打折以后的
+                - inventory          ; 库存量
+        1. attributeid        ; 欲购属性编号
+        1. goodsNum           ; 欲购数量
+- option:
+    - JSON: 
+        
+### 添加到购物车
+    
+- url: /addToShoppingCart.action
+- parameter list:
+    1. goodsId             ; 商品编号
+    1. attributeid         ; 属性编号
+    1. goodsNum            ; 商品数量
+- return:
+    1. result ;   "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
 
-1. 删除购物车中商品
-    - url: /deleteFromShoppingCart.action
-    - parameter list:
-        1. id             ; 购物车记录编号
-    - return:
-        1. result ;   "true" 成功, "false" 失败
-    - option:
-        - JSON: {"result":"true"}
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
+### 删除购物车中商品
+    
+- url: /deleteFromShoppingCart.action
+- parameter list:
+    1. id             ; 购物车记录编号
+- return:
+    1. result ;   "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
 
-1. 直接修改商品数量
-    - url: /updateGoodsNumInShoppingCart.action
-    - parameter list:
-        1. id           ; 购物车记录编号
-        1. goodsNum     ; 新的商品数量
-    - return: 
-        1. goodsNum     ; 失败返回旧值，成功返回新值
-    - option:
-        - JSON: {"goodsNum":"1"}
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
+### 直接修改商品数量
 
-1. 修改商品属性
-    - url: /updateGoodsAttrInShoppingCart.action
-    - parameter list:
-        1. id              ; 购物车记录编号
-        1. attributeid     ; 新的商品属性
-    - return: 
-        1. attributeid     ; 失败返回旧值，成功返回新值
-    - option:
-        - JSON: {"attributeid":"1111"}
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
-
+- url: /updateGoodsNumInShoppingCart.action
+- parameter list:
+    1. id           ; 购物车记录编号
+    1. goodsNum     ; 新的商品数量
+- return: 
+    1. goodsNum     ; 失败返回旧值，成功返回新值
+- option:
+    - JSON: {"goodsNum":"1"}
 
 ## 订单管理
 
-1. 通过订单号获取订单详情
-    - url: /getOrderById.action
-    - parameter list:
-        1. orderId ; 订单号
-    - return:
-        1. orderId               ; 订单号
-        1. trackingNumber        ; 运单号
-        1. orderStatus           ; 订单状态
-        1. receiver              ; 收货人
-            - name 
-            - address
-            - phone
-        1. goodsInOrder[]        ; 订单中商品数组
-            - goods 
-                - goodsId        ; 商品编号
-                - goodsName      ; 商品名
-                - goodsDescribe  ; 商品描述
-                - imageAddr      ; 图像地址 
-            - attributeValue     ; 商品属性值
-            - goodsNum           ; 购买数量
-            - actualPrice        ; 成交价
-        1. payMethod    ; 支付方式
-        1. orderTime    ; 下单时间
-        1. completeTime ; 完成时间
-        1. annotation   ; 备注
-        1. total        ; 总金额
-    - option:
-        - JSON:  
-    - status:
-        1. [ ] 前端  ; Unfinish
-        1. [ ] 后端  ; Unfinish
-        1. [ ] 联调  ; Unfinish
+### 通过订单号获取订单详情
+    
+- url: /getOrderById.action
+- parameter list:
+    1. orderId ; 订单号
+- return:
+    1. orderId               ; 订单号
+    1. trackingNumber        ; 运单号
+    1. orderStatus           ; 订单状态
+    1. receiver              ; 收货人
+        - name 
+        - address
+        - phone
+    1. goodsInOrder[]        ; 订单中商品数组
+        - goods 
+            - goodsId        ; 商品编号
+            - goodsName      ; 商品名
+            - goodsDescribe  ; 商品描述
+            - imageAddr      ; 图像地址 
+        - attributeValue     ; 商品属性值
+        - goodsNum           ; 购买数量
+        - actualPrice        ; 成交价
+    1. payMethod    ; 支付方式
+    1. orderTime    ; 下单时间
+    1. completeTime ; 完成时间
+    1. annotation   ; 备注
+    1. total        ; 总金额
+- option:
+    - JSON:  
