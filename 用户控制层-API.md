@@ -14,13 +14,13 @@
         - [检测手机号是否可用](#%E6%A3%80%E6%B5%8B%E6%89%8B%E6%9C%BA%E5%8F%B7%E6%98%AF%E5%90%A6%E5%8F%AF%E7%94%A8)
         - [添加新用户](#%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7)
     - [页面共享](#%E9%A1%B5%E9%9D%A2%E5%85%B1%E4%BA%AB)
-        - [获取用户头像地址](#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%A4%B4%E5%83%8F%E5%9C%B0%E5%9D%80)
         - [获取购物车中商品数量](#%E8%8E%B7%E5%8F%96%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E5%95%86%E5%93%81%E6%95%B0%E9%87%8F)
         - [退出登录](#%E9%80%80%E5%87%BA%E7%99%BB%E5%BD%95)
     - [首页](#%E9%A6%96%E9%A1%B5)
         - [获取分类信息](#%E8%8E%B7%E5%8F%96%E5%88%86%E7%B1%BB%E4%BF%A1%E6%81%AF)
         - [获取商品图像通过一级分类](#%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E5%9B%BE%E5%83%8F%E9%80%9A%E8%BF%87%E4%B8%80%E7%BA%A7%E5%88%86%E7%B1%BB)
     - [购物车管理](#%E8%B4%AD%E7%89%A9%E8%BD%A6%E7%AE%A1%E7%90%86)
+        - [本地购物车持久化](#%E6%9C%AC%E5%9C%B0%E8%B4%AD%E7%89%A9%E8%BD%A6%E6%8C%81%E4%B9%85%E5%8C%96)
         - [获取购物车信息（所有商品）](#%E8%8E%B7%E5%8F%96%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%BF%A1%E6%81%AF%E6%89%80%E6%9C%89%E5%95%86%E5%93%81)
         - [添加到购物车](#%E6%B7%BB%E5%8A%A0%E5%88%B0%E8%B4%AD%E7%89%A9%E8%BD%A6)
         - [删除购物车中商品](#%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E5%95%86%E5%93%81)
@@ -50,26 +50,26 @@
 
 ## 登录
 
-若本地购物车为不为空，则先将本地购物车添加到数据库并**清空该 Cookie**。
-
 ### 检测用户登录信息
 
 - url: /checkUserLogin.action
 - parameter list:
     1. username / phone ; 用户名 / 手机号
     1. password         ; 密码
-    1. Cookie:localShoppingCart  ; 本地购物车  
-        - 数据格式：[{"goodsId": "11111", "attributeId": "11", "goodsNum": "3"}]
+- return:
+    1. result   ;   "true" 成功, "false" 失败
 - option:
     - JSON: {"result":"true"}
 - side-effect:
-    - 登录成功后，设置 session 属性并返回网站首页
+    - 登录成功后，设置 session 属性
         1. userLoginStatus = "true"      
         1. shopHasOpend = "true"         //若该用户已开店   
         1. userId = ".."                 //实际用户 id
         1. nickname = ".."               //昵称
         1. shopId = ".."                 //shopHasOpend = "false" 时无意义
-    - 登录失败后，设置 session 属性 userLoginStatus = "false" 并重定向回登录页面
+        1. userAvatarAddr = ""               //用户头像地址
+    - 登录失败后，设置 session 属性 
+        1. userLoginStatus = "false"
 
 ## 注册
 
@@ -95,38 +95,29 @@
 
 ### 添加新用户
     
-- 若本地购物车为不为空，则先将本地购物车添加到数据库并**清空该 Cookie**。
 - url: /addNewUser.action
 - parameter list:
     1. username     ; 用户名
     1. phone        ; 手机号
     1. password     ; 密码
-    1. Cookie:localShoppingCart  ; 本地购物车  
-        - 数据格式：[{"goodsId": "11111", "attributeId": "11", "goodsNum": "3"}]
+- return:
+    1. result   ;   "true" 成功, "false" 失败
 - option:
-    - JSON: {"result":"false"}
+    - JSON: {"result":"true"}
 - side-effect:
-    - 添加成功后，设置 session 属性并返回网站首页
+    - 添加成功后，设置 session 属性
         1. userLoginStatus = "true"      
         1. shopHasOpend = "true"         //若该用户已开店   
         1. userId = ".."                 //实际用户 id
         1. nickname = ".."               //昵称
         1. shopId = ".."                 //shopHasOpend = false 时无意义
-    - 添加失败后，重定向回注册页面。
 
 ## 页面共享
-
-### 获取用户头像地址
-
-- url: /getUserAvatar.action
-- return: 
-    - avatarAddr         ; 头像地址
-- option:
-    - JSON:  {"avatarAddr":"/images/avatars/default.jpg"}
 
 ### 获取购物车中商品数量
 
 - url: /getGoodsNumInShoppingCart.action
+- parameter list:
 - return: 
     - goodsNum           ; 商品数量
 - option:
@@ -136,8 +127,11 @@
     
 - url: /userLogout.action
 - parameter list:
-- return: 
-    - userLoginStatus = "setAttr"  //设置为垃圾值
+- return:
+    1. session 属性 userLoginStatus = "setAttr"  //设置为垃圾值
+    1. result   ;   "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
 
 ## 首页
 
@@ -166,6 +160,18 @@
 
 
 ## 购物车管理
+
+### 本地购物车持久化
+
+发生在用户登录和注册时，由前端主动触发
+- url: /persistLocalShoppingCart.action
+- parameter list:
+    1. localShoppingCart    ; 本地购物车
+        - 数据格式：[{"goodsId": "11111", "attributeId": "11", "goodsNum": "3"}]
+- return: 
+    1. result    ; 成功返回 "true"，失败返回 "false"; 
+- option:
+    - JSON: {"result":"true"}
 
 ### 获取购物车信息（所有商品）
 
