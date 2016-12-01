@@ -23,6 +23,11 @@
     - [商品列表页](#%E5%95%86%E5%93%81%E5%88%97%E8%A1%A8%E9%A1%B5)
         - [通过分类获取商品基本信息](#%E9%80%9A%E8%BF%87%E5%88%86%E7%B1%BB%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF)
         - [通过关键词获取商品基本信息](#%E9%80%9A%E8%BF%87%E5%85%B3%E9%94%AE%E8%AF%8D%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF)
+    - [商品详情页](#%E5%95%86%E5%93%81%E8%AF%A6%E6%83%85%E9%A1%B5)
+        - [获取商品详细信息](#%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF)
+        - [获取商品所在店铺信息](#%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E6%89%80%E5%9C%A8%E5%BA%97%E9%93%BA%E4%BF%A1%E6%81%AF)
+        - [获取各评分下的评价人数](#%E8%8E%B7%E5%8F%96%E5%90%84%E8%AF%84%E5%88%86%E4%B8%8B%E7%9A%84%E8%AF%84%E4%BB%B7%E4%BA%BA%E6%95%B0)
+        - [获取商品评价](#%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E8%AF%84%E4%BB%B7)
     - [购物车管理](#%E8%B4%AD%E7%89%A9%E8%BD%A6%E7%AE%A1%E7%90%86)
         - [获取购物车信息（所有商品）](#%E8%8E%B7%E5%8F%96%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%BF%A1%E6%81%AF%E6%89%80%E6%9C%89%E5%95%86%E5%93%81)
         - [添加到购物车](#%E6%B7%BB%E5%8A%A0%E5%88%B0%E8%B4%AD%E7%89%A9%E8%BD%A6)
@@ -178,6 +183,7 @@
     1. levelOne        ; 一级分类
     1. levelTwo        ; 二级分类（可选）
     1. maxNumInOnPage  ; 一页中最多含有的商品数量
+    1. currentPage     ; 要获取的页码
     1. sortByPrice     ; 'true' 先按价格，再按销量排序；'false' 按销量由高到低排序
     1. priceUp         ; sortByPrice = 'true' 时有效。priceUp = 'true' 时由低到高排序，'false' 时相反
 - return:
@@ -198,6 +204,7 @@
 - parameter list:
     1. keyword         ; 关键词
     1. maxNumInOnPage  ; 一页中最多含有的商品数量
+    1. currentPage     ; 要获取的页码
     1. sortByPrice     ; 'true' 先按价格，再按销量排序；'false' 按销量由高到低排序
     1. priceUp         ; sortByPrice = 'true' 时有效。priceUp = 'true' 时由低到高排序，'false' 时相反
 - return:
@@ -212,6 +219,71 @@
 - option:
     - JSON:
 
+## 商品详情页
+
+### 获取商品详细信息
+
+- url: /getGoodsDetail.action
+- parameter list:
+    - goodsId                       ; 商品编号
+- return:
+    - goods
+        - goodsId                   ; 商品编号
+        - goodsName                 ; 商品名称
+        - goodsDescribe             ; 商品描述
+        - attributes[]
+            - attributeId           ; 属性编号
+            - attributeValue        ; 属性值
+        - images[]
+            - imageAddr             ; 图像地址
+        - levelOne                  ; 所在一级分类
+        - levelTwo                  ; 所在二级分类
+- option:
+    - JSON:
+
+### 获取商品所在店铺信息
+
+- url: /getShopInfoByGoodsId.action
+- parameter list:
+    - goodsId                       ; 商品编号
+- return:
+    1. shopName                     ; 店铺名称
+    1. shopId                       ; 店铺编号
+- option:
+    - JSON:
+
+### 获取各评分下的评价人数
+
+- url: /getPraiseDegree.action
+- parameter list:
+    - goodsId                       ; 商品编号
+- return:
+    1. oneStar                      ; 一星评级人数
+    1. twoStar                      ; 二星评级人数
+    1. threeStar                    ; 三星评级人数
+    1. fourStar                     ; 四星评级人数
+    1. fiveStar                     ; 五星评级人数
+- option:
+    - JSON:
+
+### 获取商品评价
+
+**按评价时间，最近的排在前面**
+
+- url: /getGoodsComments.action
+- parameter list:
+    1. goodsId         ; 商品编号
+    1. maxNumInOnPage  ; 一页中最多含有的评价数量
+    1. currentPage     ; 要获取的页码
+- return:
+    1. comments[]           ; 评价列表
+        - evaluateScore     ; 评分
+        - evaluateTime      ; 评价时间
+        - comment           ; 评价内容
+        - avatarAddr        ; 评价人头像
+        - nickname          ; 评价人昵称
+- option:
+    - JSON:
 
 ## 购物车管理
 
