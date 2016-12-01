@@ -20,6 +20,9 @@
     - [首页](#%E9%A6%96%E9%A1%B5)
         - [获取分类信息](#%E8%8E%B7%E5%8F%96%E5%88%86%E7%B1%BB%E4%BF%A1%E6%81%AF)
         - [获取商品图像通过一级分类](#%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E5%9B%BE%E5%83%8F%E9%80%9A%E8%BF%87%E4%B8%80%E7%BA%A7%E5%88%86%E7%B1%BB)
+    - [商品列表页](#%E5%95%86%E5%93%81%E5%88%97%E8%A1%A8%E9%A1%B5)
+        - [通过分类获取商品基本信息](#%E9%80%9A%E8%BF%87%E5%88%86%E7%B1%BB%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF)
+        - [通过关键词获取商品基本信息](#%E9%80%9A%E8%BF%87%E5%85%B3%E9%94%AE%E8%AF%8D%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF)
     - [购物车管理](#%E8%B4%AD%E7%89%A9%E8%BD%A6%E7%AE%A1%E7%90%86)
         - [获取购物车信息（所有商品）](#%E8%8E%B7%E5%8F%96%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%BF%A1%E6%81%AF%E6%89%80%E6%9C%89%E5%95%86%E5%93%81)
         - [添加到购物车](#%E6%B7%BB%E5%8A%A0%E5%88%B0%E8%B4%AD%E7%89%A9%E8%BD%A6)
@@ -41,7 +44,7 @@
     1. [parameter name] ; [parameter description]
     1. [parameter name] ; [parameter description]
     1. [parameter name] ; [parameter description]
-- return: 
+- return:
     1. [dataItem] ; [description]
     1. [dataItem] ; [description]
     1. [dataItem] ; [description]
@@ -61,19 +64,19 @@
     1. 失败后重定向会登录页面
 - side-effect:
     - 登录成功后，设置 session 属性
-        1. userLoginStatus = "true"      
-        1. shopHasOpend = "true"         //若该用户已开店   
+        1. userLoginStatus = "true"
+        1. shopHasOpend = "true"         //若该用户已开店
         1. userId = ".."                 //实际用户 id
         1. nickname = ".."               //昵称
         1. shopId = ".."                 //shopHasOpend = "false" 时无意义
         1. userAvatarAddr = ""               //用户头像地址
-    - 登录失败后，设置 session 属性 
+    - 登录失败后，设置 session 属性
         1. userLoginStatus = "false"
 
 ## 注册
 
 ### 检测用户名是否可用
-    
+
 - url: /checkUsername.action
 - parameter list:
     1. username ; 用户名
@@ -93,7 +96,7 @@
     - JSON: {"result":"true"}
 
 ### 添加新用户
-    
+
 - url: /addNewUser.action
 - parameter list:
     1. username     ; 用户名
@@ -104,8 +107,8 @@
     1. 失败后重定向至注册页面
 - side-effect:
     - 添加成功后，设置 session 属性
-        1. userLoginStatus = "true"      
-        1. shopHasOpend = "true"         //若该用户已开店   
+        1. userLoginStatus = "true"
+        1. shopHasOpend = "true"         //若该用户已开店
         1. userId = ".."                 //实际用户 id
         1. nickname = ".."               //昵称
         1. shopId = ".."                 //shopHasOpend = false 时无意义
@@ -116,13 +119,13 @@
 
 - url: /getGoodsNumInShoppingCart.action
 - parameter list:
-- return: 
+- return:
     - goodsNum           ; 商品数量
 - option:
     - JSON:  {"goodsNum":"3"}
-    
+
 ### 退出登录
-    
+
 - url: /userLogout.action
 - parameter list:
 - return:
@@ -139,7 +142,7 @@
 - return:
     1. result   ;   "true" 成功, "false" 失败
 - option:
-    - JSON: {"result":"true"}    
+    - JSON: {"result":"true"}
 
 ## 首页
 
@@ -147,7 +150,7 @@
 
 - url: /getCategory.action
 - parameter list:
-- return: 
+- return:
     - levelOne[]          ; 第一级分类数组
         - name            ; 第一级分类名
         - levelTwo[]      ; 该一级分类下的二级分类数组
@@ -158,13 +161,56 @@
 - url: /getGoodsImagesByLevelOne.action
 - parameter list:
     1. levelOne           ; 一级分类名
-    1. imageNum           ; 需要的图像数量，选销量最高的商品的图像   
-- return: 
+    1. imageNum           ; 需要的图像数量，选销量最高的商品的图像
+- return:
     1. goods[]
         - goodsId         ; 商品编号
         - imagesAddr      ; 商品图像
 - option:
-    - JSON:  
+    - JSON:
+
+## 商品列表页
+
+### 通过分类获取商品基本信息
+
+- url: /getGoodsBriefByCategory.action
+- parameter list:
+    1. levelOne        ; 一级分类
+    1. levelTwo        ; 二级分类（可选）
+    1. maxNumInOnPage  ; 一页中最多含有的商品数量
+    1. sortByPrice     ; 'true' 先按价格，再按销量排序；'false' 按销量由高到低排序
+    1. priceUp         ; sortByPrice = 'true' 时有效。priceUp = 'true' 时由低到高排序，'false' 时相反
+- return:
+    - goods[]
+        - goodsId                       ; 商品编号
+        - attributeId (随便一个即可)     ; 属性编号
+        - goodsName                     ; 商品名
+        - goodsDescribe                 ; 商品描述
+        - iamgeAddr                     ; 图像地址
+        - sales                         ; 销量
+        - price                         ; 价格
+- option:
+    - JSON:
+
+### 通过关键词获取商品基本信息
+
+- url: /getGoodsBriefByCategory.action
+- parameter list:
+    1. keyword         ; 关键词
+    1. maxNumInOnPage  ; 一页中最多含有的商品数量
+    1. sortByPrice     ; 'true' 先按价格，再按销量排序；'false' 按销量由高到低排序
+    1. priceUp         ; sortByPrice = 'true' 时有效。priceUp = 'true' 时由低到高排序，'false' 时相反
+- return:
+    - goods[]
+        - goodsId                       ; 商品编号
+        - attributeId (随便一个即可)     ; 属性编号
+        - goodsName                     ; 商品名
+        - goodsDescribe                 ; 商品描述
+        - iamgeAddr                     ; 图像地址
+        - sales                         ; 销量
+        - price                         ; 价格
+- option:
+    - JSON:
 
 
 ## 购物车管理
@@ -176,27 +222,27 @@
 - return:
     - []                     ; 购物车中商品数组
         1. id                ; 购物车记录编号
-        1. goods 
+        1. goods
             - goodsId        ; 商品编号
             - goodsName      ; 商品名
             - goodsDescribe  ; 商品描述
             - imageAddr      ; 图像地址
             - goodsAttrs[]   ; 商品属性数组
-                - attributeid        ; 商品属性编号
+                - attributeId        ; 商品属性编号
                 - attributeValue     ; 商品属性值
                 - price              ; 商品价格，打折以后的
                 - inventory          ; 库存量
-        1. attributeid        ; 欲购属性编号
+        1. attributeId        ; 欲购属性编号
         1. goodsNum           ; 欲购数量
 - option:
-    - JSON: 
-        
+    - JSON:
+
 ### 添加到购物车
-    
+
 - url: /addToShoppingCart.action
 - parameter list:
     1. goodsId             ; 商品编号
-    1. attributeid         ; 属性编号
+    1. attributeId         ; 属性编号
     1. goodsNum            ; 商品数量
 - return:
     1. result ;   "true" 成功, "false" 失败
@@ -204,7 +250,7 @@
     - JSON: {"result":"true"}
 
 ### 删除购物车中商品
-    
+
 - url: /deleteFromShoppingCart.action
 - parameter list:
     1. id             ; 购物车记录编号
@@ -219,7 +265,7 @@
 - parameter list:
     1. id           ; 购物车记录编号
     1. goodsNum     ; 新的商品数量
-- return: 
+- return:
     1. goodsNum     ; 失败返回旧值，成功返回新值
 - option:
     - JSON: {"goodsNum":"1"}
@@ -227,7 +273,7 @@
 ## 订单管理
 
 ### 通过订单号获取订单详情
-    
+
 - url: /getOrderById.action
 - parameter list:
     1. orderId ; 订单号
@@ -236,15 +282,15 @@
     1. trackingNumber        ; 运单号
     1. orderStatus           ; 订单状态
     1. receiver              ; 收货人
-        - name 
+        - name
         - address
         - phone
     1. goodsInOrder[]        ; 订单中商品数组
-        - goods 
+        - goods
             - goodsId        ; 商品编号
             - goodsName      ; 商品名
             - goodsDescribe  ; 商品描述
-            - imageAddr      ; 图像地址 
+            - imageAddr      ; 图像地址
         - attributeValue     ; 商品属性值
         - goodsNum           ; 购买数量
         - actualPrice        ; 成交价
@@ -254,4 +300,4 @@
     1. annotation   ; 备注
     1. total        ; 总金额
 - option:
-    - JSON:  
+    - JSON:
