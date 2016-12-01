@@ -55,7 +55,7 @@ create table receiver
    name                 varchar(30) not null,
    address              varchar(150) not null,
    phone                char(11) not null,
-   used_times           int not null,
+   used_times           int not null default 0,
    is_valid             bool not null default true,
    primary key (receiver_id),
 
