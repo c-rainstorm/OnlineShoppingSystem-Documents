@@ -205,7 +205,7 @@ create table goods_order
    order_id             bigint(16) not null AUTO_INCREMENT,
    user_id              int not null,
    registration_id      char(15) not null,
-   order_status         varchar(10) not null,
+   order_status         varchar(10) not null default '待付款',
    tracking_number      char(12),
    pay_method           varchar(16) not null,
    order_time           datetime not null,
