@@ -16,11 +16,11 @@
     - [页面共享](#%E9%A1%B5%E9%9D%A2%E5%85%B1%E4%BA%AB)
         - [获取购物车中商品数量](#%E8%8E%B7%E5%8F%96%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E5%95%86%E5%93%81%E6%95%B0%E9%87%8F)
         - [退出登录](#%E9%80%80%E5%87%BA%E7%99%BB%E5%BD%95)
+        - [收藏商品](#%E6%94%B6%E8%97%8F%E5%95%86%E5%93%81)
     - [首页](#%E9%A6%96%E9%A1%B5)
         - [获取分类信息](#%E8%8E%B7%E5%8F%96%E5%88%86%E7%B1%BB%E4%BF%A1%E6%81%AF)
         - [获取商品图像通过一级分类](#%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E5%9B%BE%E5%83%8F%E9%80%9A%E8%BF%87%E4%B8%80%E7%BA%A7%E5%88%86%E7%B1%BB)
     - [购物车管理](#%E8%B4%AD%E7%89%A9%E8%BD%A6%E7%AE%A1%E7%90%86)
-        - [本地购物车持久化](#%E6%9C%AC%E5%9C%B0%E8%B4%AD%E7%89%A9%E8%BD%A6%E6%8C%81%E4%B9%85%E5%8C%96)
         - [获取购物车信息（所有商品）](#%E8%8E%B7%E5%8F%96%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%BF%A1%E6%81%AF%E6%89%80%E6%9C%89%E5%95%86%E5%93%81)
         - [添加到购物车](#%E6%B7%BB%E5%8A%A0%E5%88%B0%E8%B4%AD%E7%89%A9%E8%BD%A6)
         - [删除购物车中商品](#%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E5%95%86%E5%93%81)
@@ -57,9 +57,8 @@
     1. username / phone ; 用户名 / 手机号
     1. password         ; 密码
 - return:
-    1. result   ;   "true" 成功, "false" 失败
-- option:
-    - JSON: {"result":"true"}
+    1. 成功后重定向至网站首页
+    1. 失败后重定向会登录页面
 - side-effect:
     - 登录成功后，设置 session 属性
         1. userLoginStatus = "true"      
@@ -101,9 +100,8 @@
     1. phone        ; 手机号
     1. password     ; 密码
 - return:
-    1. result   ;   "true" 成功, "false" 失败
-- option:
-    - JSON: {"result":"true"}
+    1. 成功后重定向至网站首页
+    1. 失败后重定向至注册页面
 - side-effect:
     - 添加成功后，设置 session 属性
         1. userLoginStatus = "true"      
@@ -133,6 +131,16 @@
 - option:
     - JSON: {"result":"true"}
 
+### 收藏商品
+
+- url: /addGoodsToFavorite.action
+- parameter list:
+    - goodsId
+- return:
+    1. result   ;   "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}    
+
 ## 首页
 
 ### 获取分类信息
@@ -160,18 +168,6 @@
 
 
 ## 购物车管理
-
-### 本地购物车持久化
-
-发生在用户登录和注册时，由前端主动触发
-- url: /persistLocalShoppingCart.action
-- parameter list:
-    1. localShoppingCart    ; 本地购物车
-        - 数据格式：[{"goodsId": "11111", "attributeId": "11", "goodsNum": "3"}]
-- return: 
-    1. result    ; 成功返回 "true"，失败返回 "false"; 
-- option:
-    - JSON: {"result":"true"}
 
 ### 获取购物车信息（所有商品）
 
