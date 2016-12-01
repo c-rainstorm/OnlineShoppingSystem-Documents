@@ -37,7 +37,7 @@ create table user
    password             varchar(120) not null,
    nickname             varchar(20),
    phone                char(11) unique not null,
-   avatar               varchar(50),
+   avatar               varchar(50) default '/images/avatars/default.jpg',
    sex                  varchar(8),
    birthday             date,
    is_valid             bool not null default true,
@@ -164,7 +164,7 @@ create table goods_image
 (
       image_id          int not null AUTO_INCREMENT,
       goods_id          int not null,
-      image_addr        varchar(50) not null default 'images/avatars/default.jpg',
+      image_addr        varchar(50) not null,
       is_valid          bool not null default true,
       primary key (image_id),
 
@@ -202,7 +202,7 @@ create table goods_attribute
 /*==============================================================*/
 create table goods_order
 (
-   order_id             bigint(16) not null AUTO_INCREMENT,
+   order_id             bigint not null AUTO_INCREMENT,
    user_id              int not null,
    shop_id              int not null,
    order_status         varchar(10) not null default '待付款',
@@ -356,7 +356,7 @@ BEGIN
     set user_shop_id = (select shop_id from shop where user_id = new.user_id order by shop_id desc limit 1);
     if new.transaction_status = '已通过' and new.transaction_type = '开店申请' then
        update shop set apply_status = '已通过' where shop_id = user_shop_id ;
-    end if; 
+    end if;
     if new.transaction_status = '已拒绝' and new.transaction_type = '开店申请' then
        update shop set apply_status = '未通过' where shop_id = user_shop_id ;
     end if;
@@ -395,21 +395,21 @@ BEGIN
  DELIMITER ;
 
 DELIMITER $
-CREATE TRIGGER `pay_order` 
-AFTER UPDATE ON `goods_order` 
-FOR EACH ROW 
+CREATE TRIGGER `pay_order`
+AFTER UPDATE ON `goods_order`
+FOR EACH ROW
 BEGIN
     DECLARE attr_id, g_id, g_num INT;
     DECLARE done INT DEFAULT FALSE;
-    DECLARE cur1 CURSOR FOR 
-            SELECT attribute_id, goods_id, goods_num 
-            from goods_in_order 
+    DECLARE cur1 CURSOR FOR
+            SELECT attribute_id, goods_id, goods_num
+            from goods_in_order
             where order_id = new.order_id;
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;		
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
     if old.order_status = "待付款" and new.order_status = "待发货" then
         update receiver set used_times = used_times + 1 where receiver_id = new.receiver_id;
 		open cur1;
-        
+
         read_loop: LOOP
             FETCH cur1 INTO attr_id, g_id, g_num;
             IF done THEN
@@ -417,7 +417,7 @@ BEGIN
             end if;
             update goods_attribute set inventory = inventory - g_num where attribute_id = attr_id;
             update goods set sales = sales + g_num where goods_id = g_id;
-        END LOOP;		
+        END LOOP;
 
         CLOSE cur1;
         end if;
