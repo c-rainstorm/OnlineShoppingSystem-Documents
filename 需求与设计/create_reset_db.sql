@@ -57,7 +57,7 @@ create table receiver
    name                 varchar(30) not null,
    address              varchar(150) not null,
    phone                char(11) not null,
-   used_times           int not null,
+   used_times           int not null default 0,
    is_valid             bool not null default true,
    primary key (receiver_id),
 
@@ -205,7 +205,7 @@ create table goods_order
    order_id             bigint(16) not null AUTO_INCREMENT,
    user_id              int not null,
    shop_id              int not null,
-   order_status         varchar(10) not null,
+   order_status         varchar(10) not null default '待付款',
    tracking_number      char(12),
    pay_method           varchar(16) not null,
    order_time           datetime not null,
