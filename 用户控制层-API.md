@@ -289,23 +289,27 @@
 
 ### 获取购物车信息（所有商品）
 
+按 shopId 排序
 - url: /getShoppingCart.action
 - parameter list: none
 - return:
-    - []                     ; 购物车中商品数组
-        1. id                ; 购物车记录编号
-        1. goods
-            - goodsId        ; 商品编号
-            - goodsName      ; 商品名
-            - goodsDescribe  ; 商品描述
-            - imageAddr      ; 图像地址
-            - goodsAttrs[]   ; 商品属性数组
-                - attributeId        ; 商品属性编号
-                - attributeValue     ; 商品属性值
-                - price              ; 商品价格，打折以后的
-                - inventory          ; 库存量
-        1. attributeId        ; 欲购属性编号
-        1. goodsNum           ; 欲购数量
+    - shop[]                        ; 购物车中商品所在店铺数组
+        1. shopId                   ; 店铺编号
+        1. shopName                 ; 店铺名称
+        1. goodsInThisShop[]        ; 购物车中商品在店铺 shopId 中的商品数组
+            1. id                   ; 购物车记录编号
+            1. goods
+                - goodsId           ; 商品编号
+                - goodsName         ; 商品名
+                - goodsDescribe     ; 商品描述
+                - imageAddr         ; 图像地址
+                - goodsAttrs[]      ; 商品属性数组
+                    - attributeId        ; 商品属性编号
+                    - attributeValue     ; 商品属性值
+                    - price              ; 商品价格，打折以后的
+                    - inventory          ; 库存量
+            1. attributeId        ; 欲购属性编号
+            1. goodsNum           ; 欲购数量
 - option:
     - JSON:
 
