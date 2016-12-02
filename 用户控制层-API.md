@@ -357,6 +357,7 @@
     1. orderId               ; 订单号
     1. trackingNumber        ; 运单号
     1. orderStatus           ; 订单状态
+    1. username              ; 下单用户用户名
     1. receiver              ; 收货人
         - name
         - address
