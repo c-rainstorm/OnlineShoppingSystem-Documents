@@ -26,15 +26,38 @@
     - [商品详情页](#%E5%95%86%E5%93%81%E8%AF%A6%E6%83%85%E9%A1%B5)
         - [获取商品详细信息](#%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF)
         - [获取商品所在店铺信息](#%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E6%89%80%E5%9C%A8%E5%BA%97%E9%93%BA%E4%BF%A1%E6%81%AF)
-        - [获取各评分下的评价人数](#%E8%8E%B7%E5%8F%96%E5%90%84%E8%AF%84%E5%88%86%E4%B8%8B%E7%9A%84%E8%AF%84%E4%BB%B7%E4%BA%BA%E6%95%B0)
-        - [获取商品评价](#%E8%8E%B7%E5%8F%96%E5%95%86%E5%93%81%E8%AF%84%E4%BB%B7)
     - [购物车管理](#%E8%B4%AD%E7%89%A9%E8%BD%A6%E7%AE%A1%E7%90%86)
         - [获取购物车信息（所有商品）](#%E8%8E%B7%E5%8F%96%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%BF%A1%E6%81%AF%E6%89%80%E6%9C%89%E5%95%86%E5%93%81)
         - [添加到购物车](#%E6%B7%BB%E5%8A%A0%E5%88%B0%E8%B4%AD%E7%89%A9%E8%BD%A6)
         - [删除购物车中商品](#%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E5%95%86%E5%93%81)
         - [直接修改商品数量](#%E7%9B%B4%E6%8E%A5%E4%BF%AE%E6%94%B9%E5%95%86%E5%93%81%E6%95%B0%E9%87%8F)
-    - [订单管理](#%E8%AE%A2%E5%8D%95%E7%AE%A1%E7%90%86)
-        - [通过订单号获取订单详情](#%E9%80%9A%E8%BF%87%E8%AE%A2%E5%8D%95%E5%8F%B7%E8%8E%B7%E5%8F%96%E8%AE%A2%E5%8D%95%E8%AF%A6%E6%83%85)
+    - [结算页](#%E7%BB%93%E7%AE%97%E9%A1%B5)
+        - [收货人管理](#%E6%94%B6%E8%B4%A7%E4%BA%BA%E7%AE%A1%E7%90%86)
+        - [确认下单](#%E7%A1%AE%E8%AE%A4%E4%B8%8B%E5%8D%95)
+    - [收银页](#%E6%94%B6%E9%93%B6%E9%A1%B5)
+        - [确认支付](#%E7%A1%AE%E8%AE%A4%E6%94%AF%E4%BB%98)
+        - [取消订单](#%E5%8F%96%E6%B6%88%E8%AE%A2%E5%8D%95)
+    - [个人中心](#%E4%B8%AA%E4%BA%BA%E4%B8%AD%E5%BF%83)
+        - [个人信息管理](#%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E7%AE%A1%E7%90%86)
+            - [获取用户信息](#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF)
+            - [更新昵称](#%E6%9B%B4%E6%96%B0%E6%98%B5%E7%A7%B0)
+            - [更新手机号](#%E6%9B%B4%E6%96%B0%E6%89%8B%E6%9C%BA%E5%8F%B7)
+            - [更新性别](#%E6%9B%B4%E6%96%B0%E6%80%A7%E5%88%AB)
+            - [更新生日](#%E6%9B%B4%E6%96%B0%E7%94%9F%E6%97%A5)
+        - [订单管理](#%E8%AE%A2%E5%8D%95%E7%AE%A1%E7%90%86)
+            - [通过订单状态获取订单](#%E9%80%9A%E8%BF%87%E8%AE%A2%E5%8D%95%E7%8A%B6%E6%80%81%E8%8E%B7%E5%8F%96%E8%AE%A2%E5%8D%95)
+            - [通过订单号获取订单详情](#%E9%80%9A%E8%BF%87%E8%AE%A2%E5%8D%95%E5%8F%B7%E8%8E%B7%E5%8F%96%E8%AE%A2%E5%8D%95%E8%AF%A6%E6%83%85)
+            - [更新订单状态](#%E6%9B%B4%E6%96%B0%E8%AE%A2%E5%8D%95%E7%8A%B6%E6%80%81)
+        - [收藏管理](#%E6%94%B6%E8%97%8F%E7%AE%A1%E7%90%86)
+            - [获取已收藏商品](#%E8%8E%B7%E5%8F%96%E5%B7%B2%E6%94%B6%E8%97%8F%E5%95%86%E5%93%81)
+            - [获取已收藏店铺](#%E8%8E%B7%E5%8F%96%E5%B7%B2%E6%94%B6%E8%97%8F%E5%BA%97%E9%93%BA)
+            - [删除已收藏商品](#%E5%88%A0%E9%99%A4%E5%B7%B2%E6%94%B6%E8%97%8F%E5%95%86%E5%93%81)
+            - [删除已收藏店铺](#%E5%88%A0%E9%99%A4%E5%B7%B2%E6%94%B6%E8%97%8F%E5%BA%97%E9%93%BA)
+        - [收货人管理](#%E6%94%B6%E8%B4%A7%E4%BA%BA%E7%AE%A1%E7%90%86)
+            - [获取所有收货人信息](#%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89%E6%94%B6%E8%B4%A7%E4%BA%BA%E4%BF%A1%E6%81%AF)
+            - [添加收货人](#%E6%B7%BB%E5%8A%A0%E6%94%B6%E8%B4%A7%E4%BA%BA)
+            - [修改收货人信息](#%E4%BF%AE%E6%94%B9%E6%94%B6%E8%B4%A7%E4%BA%BA%E4%BF%A1%E6%81%AF)
+            - [删除收货人](#%E5%88%A0%E9%99%A4%E6%94%B6%E8%B4%A7%E4%BA%BA)
 
 <!-- /TOC -->
 
@@ -183,7 +206,7 @@
     1. levelOne        ; 一级分类
     1. levelTwo        ; 二级分类（可选）
     1. maxNumInOnPage  ; 一页中最多含有的商品数量
-    1. currentPage     ; 要获取的页码
+    1. pageNum     ; 要获取的页码
     1. sortByPrice     ; 'true' 先按价格，再按销量排序；'false' 按销量由高到低排序
     1. priceUp         ; sortByPrice = 'true' 时有效。priceUp = 'true' 时由低到高排序，'false' 时相反
 - return:
@@ -204,7 +227,7 @@
 - parameter list:
     1. keyword         ; 关键词
     1. maxNumInOnPage  ; 一页中最多含有的商品数量
-    1. currentPage     ; 要获取的页码
+    1. pageNum     ; 要获取的页码
     1. sortByPrice     ; 'true' 先按价格，再按销量排序；'false' 按销量由高到低排序
     1. priceUp         ; sortByPrice = 'true' 时有效。priceUp = 'true' 时由低到高排序，'false' 时相反
 - return:
@@ -249,39 +272,6 @@
 - return:
     1. shopName                     ; 店铺名称
     1. shopId                       ; 店铺编号
-- option:
-    - JSON:
-
-### 获取各评分下的评价人数
-
-- url: /getPraiseDegree.action
-- parameter list:
-    - goodsId                       ; 商品编号
-- return:
-    1. oneStar                      ; 一星评级人数
-    1. twoStar                      ; 二星评级人数
-    1. threeStar                    ; 三星评级人数
-    1. fourStar                     ; 四星评级人数
-    1. fiveStar                     ; 五星评级人数
-- option:
-    - JSON:
-
-### 获取商品评价
-
-**按评价时间，最近的排在前面**
-
-- url: /getGoodsComments.action
-- parameter list:
-    1. goodsId         ; 商品编号
-    1. maxNumInOnPage  ; 一页中最多含有的评价数量
-    1. currentPage     ; 要获取的页码
-- return:
-    1. comments[]           ; 评价列表
-        - evaluateScore     ; 评分
-        - evaluateTime      ; 评价时间
-        - comment           ; 评价内容
-        - avatarAddr        ; 评价人头像
-        - nickname          ; 评价人昵称
 - option:
     - JSON:
 
@@ -346,9 +336,120 @@
 - option:
     - JSON: {"goodsNum":"1"}
 
-## 订单管理
+## 结算页
 
-### 通过订单号获取订单详情
+### 收货人管理
+
+见个人中心收货人管理
+
+### 确认下单
+
+- url: /confirmOrder.action
+- parameter list:
+    - shop[]                    ; 店铺列表
+        - shopId                ; 店铺编号
+        - attributeIds[]        ; 属性编号列表
+            - attributeId       ; 属性编号
+- return:
+    1. orderId[]                ; 订单编号列表
+        - orderId               ; 订单编号
+
+## 收银页
+
+### 确认支付
+
+- url: /payOrder.action
+- parameter list:
+    1. orderId[]                ; 订单编号列表
+        - orderId               ; 订单编号
+- return:
+    1. result                   ;   "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
+
+### 取消订单
+
+- url: /cancelOrder.action
+- parameter list:
+    1. orderId[]                ; 订单编号列表
+        - orderId               ; 订单编号
+- return:
+    1. result                   ;   "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
+
+## 个人中心
+
+### 个人信息管理
+####　获取用户信息
+
+- url: /getUserInfo.action
+- parameter list:
+- return:
+    1. username
+    1. nickname
+    1. phone
+    1. sex
+    1. birthday
+- option:
+    - JSON:
+
+#### 更新昵称
+
+- url: /updateNickname.action
+- parameter list:
+    1. nickname                 ; 新昵称
+- return:
+    1. result                   ;   "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
+
+#### 更新手机号
+
+- url: /updatePhone.action
+- parameter list:
+    1. phone                    ; 手机号
+- return:
+    1. result                   ;   "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
+
+#### 更新性别
+
+- url: /updateSex.action
+- parameter list:
+    1. sex                      ; 性别
+- return:
+    1. result                   ;   "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
+
+#### 更新生日
+
+- url: /updateBirthday.action
+- parameter list:
+    1. birthday                 ; 生日
+- return:
+    1. result                   ; "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
+
+### 订单管理
+
+#### 通过订单状态获取订单
+
+- url: /getOrderByStatus.action
+- parameter list:
+    1. orderStatus
+    1. maxNumInOnPage
+    1. pageNum
+- return:
+    1. orderId
+    1. orderStatus
+- option:
+    - JSON:  //TODO: 后端开发人员给出一个示例
+
+#### 通过订单号获取订单详情
 
 - url: /getOrderById.action
 - parameter list:
@@ -378,3 +479,119 @@
     1. total        ; 总金额
 - option:
     - JSON:
+
+#### 更新订单状态
+
+- url: /updateOrderStatus.action
+- parameter list:
+    1. orderId              ; 订单编号
+    1. orderStatus          ; 未更改之前的订单状态
+- return:
+    1. result               ; "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
+
+### 收藏管理
+
+#### 获取已收藏商品
+
+以时间排序（收藏编号），最近的优先。
+- url: /getGoodsFavorite.action
+- parameter list:
+    1. maxNumInOnPage  ; 一页中最多含有的商品数量
+    1. pageNum         ; 要获取的页码
+- return:
+    - goods[]
+        - goodsId                       ; 商品编号
+        - goodsName                     ; 商品名
+        - goodsDescribe                 ; 商品描述
+        - iamgeAddr                     ; 图像地址
+        - sales                         ; 销量
+        - price                         ; 价格
+- option:
+    - JSON:
+
+#### 获取已收藏店铺
+
+以时间排序（收藏编号），最近的优先。
+- url: /getShopFavorite.action
+- parameter list:
+    1. maxNumInOnPage  ; 一页中最多含有的店铺数量
+    1. pageNum         ; 要获取的页码
+- return:
+    - shops[]
+        - shopId                       ; 商品编号
+        - shopName                     ; 商品名
+- option:
+    - JSON:
+
+#### 删除已收藏商品
+
+- url: /deleteGoodsFromFavorite.action
+- parameter list:
+    1. goodsId              ; 商品编号
+- return:
+    1. result               ; "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
+
+#### 删除已收藏店铺
+
+- url: /deleteGoodsFromFavorite.action
+- parameter list:
+    1. shopId              ; 商品编号
+- return:
+    1. result               ; "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
+
+### 收货人管理
+
+#### 获取所有收货人信息
+
+- url: /getReceivers.action
+- parameter list:
+- return:
+    - receivers[]
+        1. receiverId               ; 收货人编号
+        1. receiverName             ; 收货人姓名
+        1. receiverAddress          ; 收货人地址
+        1. receiverPhone            ; 收货人手机号
+- option:
+    - JSON:
+
+#### 添加收货人
+
+- url: /addReceiver.action
+- parameter list:
+    1. receiverId               ; 收货人编号
+    1. receiverName             ; 收货人姓名
+    1. receiverAddress          ; 收货人地址
+    1. receiverPhone            ; 收货人手机号
+- return:
+    1. result                   ;   "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
+
+#### 修改收货人信息
+
+- url: /modifyReceiver.action
+- parameter list:
+    1. receiverId               ; 收货人编号
+    1. receiverName             ; 收货人姓名
+    1. receiverAddress          ; 收货人地址
+    1. receiverPhone            ; 收货人手机号
+- return:
+    1. result                   ;   "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
+
+####　删除收货人
+
+- url: /deleteReceiver.action
+- parameter list:
+    1. receiverId               ; 收货人编号
+- return:
+    1. result                   ;   "true" 成功, "false" 失败
+- option:
+    - JSON: {"result":"true"}
