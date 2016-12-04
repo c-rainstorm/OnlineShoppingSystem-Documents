@@ -193,7 +193,7 @@
 - return:
     1. goods[]
         - goodsId         ; 商品编号
-        - imagesAddr      ; 商品图像
+        - imageAddr       ; 商品图像
 - option:
     - JSON:
 
@@ -215,7 +215,7 @@
         - attributeId (随便一个即可)     ; 属性编号
         - goodsName                     ; 商品名
         - goodsDescribe                 ; 商品描述
-        - iamgeAddr                     ; 图像地址
+        - imageAddr                     ; 图像地址
         - sales                         ; 销量
         - price                         ; 价格
 - option:
@@ -236,7 +236,7 @@
         - attributeId (随便一个即可)     ; 属性编号
         - goodsName                     ; 商品名
         - goodsDescribe                 ; 商品描述
-        - iamgeAddr                     ; 图像地址
+        - imageAddr                     ; 图像地址
         - sales                         ; 销量
         - price                         ; 价格
 - option:
@@ -505,7 +505,7 @@
         - goodsId                       ; 商品编号
         - goodsName                     ; 商品名
         - goodsDescribe                 ; 商品描述
-        - iamgeAddr                     ; 图像地址
+        - imageAddr                     ; 图像地址
         - sales                         ; 销量
         - price                         ; 价格
 - option:
