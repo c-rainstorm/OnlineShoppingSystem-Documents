@@ -254,9 +254,13 @@
         - goodsId                   ; 商品编号
         - goodsName                 ; 商品名称
         - goodsDescribe             ; 商品描述
+        - discountDeadline          ; 打折截止时间
+        - discountRate              ; 打折比例
         - attributes[]
             - attributeId           ; 属性编号
             - attributeValue        ; 属性值
+            - price                 ; 价格
+            - inventory             ; 库存
         - images[]
             - imageAddr             ; 图像地址
         - levelOne                  ; 所在一级分类
