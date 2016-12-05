@@ -223,7 +223,7 @@
 
 ### 通过关键词获取商品基本信息
 
-- url: /getGoodsBriefByCategory.action
+- url: /getGoodsBriefByKeyword.action
 - parameter list:
     1. keyword         ; 关键词
     1. maxNumInOnPage  ; 一页中最多含有的商品数量
