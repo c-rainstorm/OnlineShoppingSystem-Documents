@@ -40,6 +40,7 @@
     - [个人中心](#%E4%B8%AA%E4%BA%BA%E4%B8%AD%E5%BF%83)
         - [个人信息管理](#%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E7%AE%A1%E7%90%86)
             - [获取用户信息](#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF)
+            - [更新头像](#%E6%9B%B4%E6%96%B0%E5%A4%B4%E5%83%8F)
             - [更新昵称](#%E6%9B%B4%E6%96%B0%E6%98%B5%E7%A7%B0)
             - [更新手机号](#%E6%9B%B4%E6%96%B0%E6%89%8B%E6%9C%BA%E5%8F%B7)
             - [更新性别](#%E6%9B%B4%E6%96%B0%E6%80%A7%E5%88%AB)
@@ -397,6 +398,16 @@
     1. birthday
 - option:
     - JSON:
+
+#### 更新头像
+
+- url: /updateAvatar.action
+- parameter list:
+    1. avatar                   ; 新头像（图片）
+- return:
+    1. avatar                   ; 头像地址
+- option:
+    - JSON: {"avatar":"avatars/xxx.jpg"}
 
 #### 更新昵称
 
