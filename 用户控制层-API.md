@@ -579,7 +579,6 @@
 
 - url: /addReceiver.action
 - parameter list:
-    1. receiverId               ; 收货人编号
     1. receiverName             ; 收货人姓名
     1. receiverAddress          ; 收货人地址
     1. receiverPhone            ; 收货人手机号
