@@ -459,8 +459,9 @@
     1. maxNumInOnPage
     1. pageNum
 - return:
-    1. orderId
-    1. orderStatus
+    - []
+        1. orderId
+        1. orderStatus
 - option:
     - JSON:  //TODO: 后端开发人员给出一个示例
 
