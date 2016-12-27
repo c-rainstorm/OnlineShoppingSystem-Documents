@@ -353,6 +353,7 @@
 - parameter list:
     - orders[]               ; 订单列表
         - shopId                ; 店铺编号
+       - annotation             ; 给商家的留言
         - id[]                  ; 购物车编号
     - receiverId               ; 收货人 id
     - payMethod              ; 付款方式
