@@ -456,6 +456,8 @@
 - url: /getOrderByStatus.action
 - parameter list:
     1. orderStatus
+        - ; 为待收货时请求待发货和待收货两个状态订单
+        - ; 为已完成时请求已完成和已取消两个状态订单
     1. maxNumInOnPage
     1. pageNum
 - return:
