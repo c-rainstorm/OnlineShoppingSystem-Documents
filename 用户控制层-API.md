@@ -353,8 +353,7 @@
 - parameter list:
     - shop[]                    ; 店铺列表
         - shopId                ; 店铺编号
-        - attributeIds[]        ; 属性编号列表
-            - attributeId       ; 属性编号
+        - id[]                  ; 购物车编号
 - return:
     1. orderId[]                ; 订单编号列表
         - orderId               ; 订单编号
