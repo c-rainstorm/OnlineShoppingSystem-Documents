@@ -364,10 +364,9 @@
 
 - url: /payOrder.action
 - parameter list:
-    1. orderId[]                ; 订单编号列表
-        - orderId               ; 订单编号
+    - orderId                  ; 订单编号
 - return:
-    1. result                   ;   "true" 成功, "false" 失败
+    1. result                  ;   "true" 成功, "false" 失败
 - option:
     - JSON: {"result":"true"}
 
@@ -375,8 +374,7 @@
 
 - url: /cancelOrder.action
 - parameter list:
-    1. orderId[]                ; 订单编号列表
-        - orderId               ; 订单编号
+    - orderId                   ; 订单编号
 - return:
     1. result                   ;   "true" 成功, "false" 失败
 - option:
