@@ -351,11 +351,13 @@
 
 - url: /confirmOrder.action
 - parameter list:
-    - shop[]                    ; 店铺列表
+    - orders[]               ; 订单列表
         - shopId                ; 店铺编号
         - id[]                  ; 购物车编号
+    - receiverId               ; 收货人 id
+    - payMethod              ; 付款方式
 - return:
-    1. orderId[]                ; 订单编号列表
+    1. orderId[]             ; 订单编号列表
         - orderId               ; 订单编号
 
 ## 收银页
@@ -460,6 +462,7 @@
 - return:
     - []
         1. orderId
+        1. shopName
         1. orderStatus
 - option:
     - JSON:  //TODO: 后端开发人员给出一个示例
