@@ -502,7 +502,7 @@
 - url: /updateOrderStatus.action
 - parameter list:
     1. orderId              ; 订单编号
-    1. orderStatus          ; 未更改之前的订单状态
+    1. orderStatus          ; 新的订单状态
 - return:
     1. result               ; "true" 成功, "false" 失败
 - option:
