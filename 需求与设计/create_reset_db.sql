@@ -38,7 +38,7 @@ create table user
    nickname             varchar(20),
    phone                char(11) unique not null,
    avatar               varchar(50) default '/images/avatars/default.jpg',
-   sex                  varchar(8),
+   sex                  varchar(8) default '保密',
    birthday             date,
    is_valid             bool not null default true,
    primary key (user_id),
