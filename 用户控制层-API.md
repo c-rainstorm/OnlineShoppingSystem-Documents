@@ -337,9 +337,9 @@
     1. id           ; 购物车记录编号
     1. goodsNum     ; 新的商品数量
 - return:
-    1. goodsNum     ; 失败返回旧值，成功返回新值
+    1. result ;   "true" 成功, "false" 失败
 - option:
-    - JSON: {"goodsNum":"1"}
+    - JSON: {"result":"true"}
 
 ## 结算页
 
