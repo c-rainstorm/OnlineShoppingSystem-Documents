@@ -367,11 +367,12 @@
 
 - url: /payOrder.action
 - parameter list:
-    - orderId                  ; 订单编号
+    - orderId[]                  ; 订单编号
 - return:
-    1. result                  ;   "true" 成功, "false" 失败
+    1. success                  ;   支付成功的个数
+    1. fail                     ;   支付失败的个数
 - option:
-    - JSON: {"result":"true"}
+    - JSON: {"success":"3","fail":"1"}
 
 ### 取消订单
 
