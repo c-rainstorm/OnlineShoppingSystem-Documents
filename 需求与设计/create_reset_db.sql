@@ -532,7 +532,7 @@ CREATE TRIGGER `CHECK_goods_num`
 BEFORE UPDATE ON shopping_cart
 FOR EACH ROW
 BEGIN
-    IF (NEW.goods_num < 0) and (NEW.goods_num > 5) THEN
+    IF NEW.goods_num < 1 THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'check constraint on shopping_cart.goods_num failed';
     END IF;
