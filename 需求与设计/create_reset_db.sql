@@ -423,3 +423,118 @@ BEGIN
         end if;
 END $
 DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER `CHECK_inventory` 
+BEFORE UPDATE ON goods_attribute
+FOR EACH ROW
+BEGIN
+    IF NEW.inventory < 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'check constraint on goods_attribute.inventory failed';
+    END IF;
+END$$   
+DELIMITER ;  
+
+DELIMITER $$
+CREATE TRIGGER `CHECK_gender` 
+BEFORE UPDATE ON `user`
+FOR EACH ROW
+BEGIN
+    IF (NEW.sex != '男') and (new.sex != '女') and (new.sex != '保密') THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'check constraint on user.sex failed';
+    END IF;
+END$$   
+DELIMITER ;  
+
+DELIMITER $$
+CREATE TRIGGER `CHECK_transaction_status` 
+BEFORE UPDATE ON `transaction`
+FOR EACH ROW
+BEGIN
+    IF (NEW.transaction_status != '未处理') and (new.transaction_status != '已通过') and (new.transaction_status != '已拒绝') THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'check constraint on transaction.transaction_status failed';
+    END IF;
+END$$   
+DELIMITER ;  
+
+DELIMITER $$
+CREATE TRIGGER `CHECK_transaction_type` 
+BEFORE UPDATE ON `transaction`
+FOR EACH ROW
+BEGIN
+    IF (NEW.transaction_type  != '开店申请') and (new.transaction_type  != '用户投诉') THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'check constraint on transaction.transaction_type failed';
+    END IF;
+END$$   
+DELIMITER ;  
+
+
+
+DELIMITER $$
+CREATE TRIGGER `CHECK_apply_status` 
+BEFORE UPDATE ON shop
+FOR EACH ROW
+BEGIN
+    IF (NEW.apply_status != '待审核') and (new.apply_status != '已通过') and (new.apply_status != '未通过') THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'check constraint on shop.apply_status failed';
+    END IF;
+END$$   
+DELIMITER ;  
+
+
+DELIMITER $$
+CREATE TRIGGER `CHECK_order_status` 
+BEFORE UPDATE ON goods_order
+FOR EACH ROW
+BEGIN
+    IF (NEW.order_status  != '待付款') and (new.order_status  != '待发货') 
+					and (NEW.order_status  != '待收货') and (new.order_status  != '待评价') 
+					and (NEW.order_status  != '已完成') and (new.order_status  != '已取消') THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'check constraint on goods_order.order_status failed';
+    END IF;
+END$$   
+DELIMITER ;  
+
+
+
+DELIMITER $$
+CREATE TRIGGER `CHECK_pay_method` 
+BEFORE UPDATE ON goods_order
+FOR EACH ROW
+BEGIN
+    IF (NEW.pay_method != '货到付款') and (new.pay_method != '在线支付')THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'check constraint on goods_order.pay_method failed';
+    END IF;
+END$$   
+DELIMITER ;  
+
+DELIMITER $$
+CREATE TRIGGER `CHECK_evaluate_score` 
+BEFORE UPDATE ON goods_in_order
+FOR EACH ROW
+BEGIN
+    IF (NEW.evaluate_score < 0) and (NEW.evaluate_score > 5) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'check constraint on goods_in_order.evaluate_score failed';
+    END IF;
+END$$   
+DELIMITER ;  
+
+DELIMITER $$
+CREATE TRIGGER `CHECK_goods_num` 
+BEFORE UPDATE ON shopping_cart
+FOR EACH ROW
+BEGIN
+    IF (NEW.goods_num < 0) and (NEW.goods_num > 5) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'check constraint on shopping_cart.goods_num failed';
+    END IF;
+END$$   
+DELIMITER ;  
