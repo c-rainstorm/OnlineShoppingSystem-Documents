@@ -239,7 +239,7 @@ create table goods_in_order
    cost                 double not null,
    actual_price         double not null,
    comment              varchar(300),
-   evaluate_score       smallint,
+   evaluate_score       smallint default 0,
    evaluate_time        datetime,
    primary key (attribute_id, order_id),
 
@@ -320,7 +320,7 @@ create table shopping_cart
    attribute_id         int not null,
    /* 为保证效率增加的 goods_id 冗余 */
    goods_id             int not null,
-   goods_num            int not null,
+   goods_num            int not null default 1,
    is_valid             bool not null default true,
    primary key (id),
 
