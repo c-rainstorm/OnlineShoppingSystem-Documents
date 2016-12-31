@@ -1,0 +1,22 @@
+@startuml
+
+class LoginActivity
+class MainActivity #green
+
+
+LoginActivity -> MainActivity
+
+MainActivity --> HomeFragment
+MainActivity --> CartFragment
+MainActivity --> AccountFragment
+
+HomeFragment --> SearchActivity
+SearchActivity --> SearchResultActivity
+SearchResultActivity --> GoodsDetailActivity
+
+CartFragment --> ConfirmOrderActivity
+CartFragment --> GoodsDetailActivity
+
+AccountFragment --> OrderActivity
+
+@enduml
